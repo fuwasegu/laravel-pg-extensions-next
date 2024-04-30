@@ -18,11 +18,6 @@ use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 final class ConnectionTest extends FunctionalTestCase
 {
     use DatabaseTransactions;

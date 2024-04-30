@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fuwasegu\Postgres\Unit\Schema\Blueprint;
+namespace Fuwasegu\Postgres\Tests\Unit\Schema\Blueprint;
 
 use Fuwasegu\Postgres\Tests\TestCase;
 use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
@@ -11,16 +11,11 @@ use InvalidArgumentException;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 final class PartitionTest extends TestCase
 {
     use BlueprintAssertions;
 
-    private const TABLE = 'test_table';
+    private const string TABLE = 'test_table';
 
     #[Override]
     protected function setUp(): void

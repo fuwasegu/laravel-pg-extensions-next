@@ -2,41 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Fuwasegu\Postgres\Unit\Schema\Types;
+namespace Fuwasegu\Postgres\Tests\Unit\Schema\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Fuwasegu\Postgres\Schema\Types\TsRangeType;
 use Fuwasegu\Postgres\Tests\TestCase;
+use Mockery;
+use Mockery\MockInterface;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 final class TsRangeTypeTest extends TestCase
 {
-    /**
-     * @var AbstractPlatform
-     */
-    private $abstractPlatform;
+    private AbstractPlatform&MockInterface $abstractPlatform;
 
-    /**
-     * @var TsRangeType
-     */
-    private $type;
+    private TsRangeType $type;
 
     #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->type = $this
-            ->getMockBuilder(TsRangeType::class)
-            ->disableOriginalConstructor()
-            ->getMockForAbstractClass();
-        $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
+        $this->type = new TsRangeType();
+        $this->abstractPlatform = Mockery::mock(AbstractPlatform::class);
     }
 
     #[Test]

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Fuwasegu\Postgres\Unit\Schema\Blueprint;
+namespace Fuwasegu\Postgres\Tests\Unit\Schema\Blueprint;
 
 use Closure;
 use Fuwasegu\Postgres\Schema\Blueprint;
@@ -12,16 +12,11 @@ use Override;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 final class IndexTest extends TestCase
 {
     use BlueprintAssertions;
 
-    private const TABLE = 'test_table';
+    private const string TABLE = 'test_table';
 
     #[Override]
     protected function setUp(): void

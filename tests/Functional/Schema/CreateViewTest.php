@@ -12,11 +12,6 @@ use Illuminate\Support\Facades\Schema;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 final class CreateViewTest extends FunctionalTestCase
 {
     use DatabaseTransactions;

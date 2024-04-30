@@ -10,10 +10,10 @@ use Override;
 
 class DateRangeType extends Type
 {
-    public const TYPE_NAME = 'daterange';
+    public const string TYPE_NAME = 'daterange';
 
     #[Override]
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return static::TYPE_NAME;
     }

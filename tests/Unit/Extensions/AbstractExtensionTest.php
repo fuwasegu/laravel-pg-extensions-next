@@ -15,13 +15,11 @@ use Illuminate\Support\ServiceProvider;
 use Override;
 use PHPUnit\Framework\Attributes\Test;
 
-/**
- * @internal
- *
- * @coversNothing
- */
 final class AbstractExtensionTest extends TestCase
 {
+    /**
+     * @throws MacroableMissedException
+     */
     #[Test]
     public function registerInvalidExtension(): void
     {
@@ -33,6 +31,9 @@ final class AbstractExtensionTest extends TestCase
         $abstractExtension::register();
     }
 
+    /**
+     * @throws MixinInvalidException
+     */
     #[Test]
     public function registerWithInvalidMixin(): void
     {
