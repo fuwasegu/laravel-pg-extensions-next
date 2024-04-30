@@ -24,7 +24,7 @@ final class ConnectionTest extends FunctionalTestCase
 
     use InteractsWithDatabase;
 
-    protected $emulatePrepares = true;
+    protected bool $emulatePrepares = true;
 
     #[Test]
     public function connectionFactory(): void

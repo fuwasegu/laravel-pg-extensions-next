@@ -10,7 +10,7 @@ use PDO;
 
 abstract class FunctionalTestCase extends TestCase
 {
-    protected $emulatePrepares = false;
+    protected bool $emulatePrepares = false;
 
     #[Override]
     protected function setUp(): void
