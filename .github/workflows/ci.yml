@@ -7,10 +7,11 @@ on:
   pull_request: {}
 
 env:
-  DB_USER: 'postgres'
-  DB_NAME: 'testing'
+  DB_USERNAME: 'postgres'
   DB_PASSWORD: 'postgres'
   DB_HOST: '127.0.0.1'
+  DB_DATABASE: 'testing'
+  DB_PORT: '5432'
 
 jobs:
   build:
@@ -21,7 +22,7 @@ jobs:
         image: postgres
         env:
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
-          POSTGRES_USER: ${{ env.DB_USER }}
+          POSTGRES_USER: ${{ env.DB_USERNAME }}
           POSTGRES_DB: ${{ env.DB_NAME }}
         ports:
           - 5432:5432
