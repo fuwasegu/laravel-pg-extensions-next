@@ -57,11 +57,9 @@ class Builder extends BasePostgresBuilder
 
     /**
      * @param string $table
-     *
-     * @return Blueprint|\Illuminate\Database\Schema\Blueprint
      */
     #[Override]
-    protected function createBlueprint($table, ?Closure $callback = null): \Illuminate\Database\Schema\Blueprint|Blueprint
+    protected function createBlueprint($table, ?Closure $callback = null): Blueprint|\Illuminate\Database\Schema\Blueprint
     {
         return new Blueprint($table, $callback);
     }
@@ -69,17 +67,17 @@ class Builder extends BasePostgresBuilder
     /**
      * Get the data type for the given column name.
      *
-     * @param string $table
-     * @param string $column
-     * @param bool $fullDefinition
-     * @return string
+     * @param  string          $table
+     * @param  string          $column
+     * @param  bool            $fullDefinition
      * @throws Exception
      * @throws SchemaException
      */
+    #[Override]
     public function getColumnType($table, $column, $fullDefinition = false): string
     {
         if ($this->connection instanceof PostgresConnection) {
-            $table = $this->connection->getTablePrefix().$table;
+            $table = $this->connection->getTablePrefix() . $table;
 
             return $this->connection
                 ->getDoctrineColumn($table, $column)

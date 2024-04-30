@@ -41,7 +41,6 @@ class PostgresConnection extends BasePostgresConnection
         TsRangeType::TYPE_NAME => TsRangeType::class,
         TsTzRangeType::TYPE_NAME => TsTzRangeType::class,
         NumericType::TYPE_NAME => NumericType::class,
-
     ];
 
     /**

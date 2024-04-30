@@ -17,7 +17,7 @@ use PDOStatement;
 readonly class PDOConnection implements Connection
 {
     public function __construct(
-        private PDO $connection
+        private PDO $connection,
     ) {
     }
 
@@ -35,7 +35,7 @@ readonly class PDOConnection implements Connection
     public function prepare(string $sql): StatementInterface
     {
         return $this->createStatement(
-            $this->connection->prepare($sql)
+            $this->connection->prepare($sql),
         );
     }
 

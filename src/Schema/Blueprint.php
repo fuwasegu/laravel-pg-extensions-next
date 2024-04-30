@@ -105,6 +105,7 @@ class Blueprint extends BaseBlueprint
     }
 
     /**
+     * @param  mixed     $index
      * @throws Exception
      */
     public function hasIndex($index, bool $unique = false): bool
