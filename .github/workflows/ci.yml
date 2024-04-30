@@ -38,6 +38,7 @@ jobs:
         with:
           php-version: ${{ matrix.php }}
           coverage: xdebug
+          extensions: pdo_pgsql
 
       - name: Composer install
         run: composer install
