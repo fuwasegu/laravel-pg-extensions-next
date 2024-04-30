@@ -10,6 +10,7 @@ use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 use Override;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -41,7 +42,8 @@ final class CreateViewTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    public function testCreateFacadeView(): void
+    #[Test]
+    public function createFacadeView(): void
     {
         Schema::createView('test_view', 'select * from test_table where name is not null');
 
@@ -55,7 +57,8 @@ final class CreateViewTest extends FunctionalTestCase
         $this->notSeeView('test_view');
     }
 
-    public function testCreateBlueprintView(): void
+    #[Test]
+    public function createBlueprintView(): void
     {
         Schema::table('test_table', static function (Blueprint $table): void {
             $table->createView('test_view', 'select * from test_table where name is not null');

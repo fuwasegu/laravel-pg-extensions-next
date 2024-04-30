@@ -8,6 +8,7 @@ use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Fuwasegu\Postgres\Schema\Types\TsRangeType;
 use Fuwasegu\Postgres\Tests\TestCase;
 use Override;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -38,12 +39,14 @@ final class TsRangeTypeTest extends TestCase
         $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
     }
 
-    public function testGetSQLDeclaration(): void
+    #[Test]
+    public function getSQLDeclaration(): void
     {
         $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
     }
 
-    public function testGetTypeName(): void
+    #[Test]
+    public function getTypeName(): void
     {
         $this->assertSame(TsRangeType::TYPE_NAME, $this->type->getName());
     }

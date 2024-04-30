@@ -9,6 +9,7 @@ use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
 use Override;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -29,13 +30,15 @@ final class PartitionTest extends TestCase
         $this->initializeMock(self::TABLE);
     }
 
-    public function testDetachPartition(): void
+    #[Test]
+    public function detachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
-    public function testAttachPartitionRangeInt(): void
+    #[Test]
+    public function attachPartitionRangeInt(): void
     {
         $this->blueprint->attachPartition('some_partition')
             ->range([
@@ -45,14 +48,16 @@ final class PartitionTest extends TestCase
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
-    public function testAttachPartitionFailedWithoutForValuesPart(): void
+    #[Test]
+    public function attachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
         $this->expectException(InvalidArgumentException::class);
         $this->runToSql();
     }
 
-    public function testAttachPartitionRangeDates(): void
+    #[Test]
+    public function attachPartitionRangeDates(): void
     {
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
@@ -69,7 +74,8 @@ final class PartitionTest extends TestCase
         ));
     }
 
-    public function testAttachPartitionStringDates(): void
+    #[Test]
+    public function attachPartitionStringDates(): void
     {
         $today = '2010-01-01';
         $tomorrow = '2010-12-31';
@@ -86,37 +92,43 @@ final class PartitionTest extends TestCase
         ));
     }
 
-    public function testAddingTsrangeColumn(): void
+    #[Test]
+    public function addingTsrangeColumn(): void
     {
         $this->blueprint->tsrange('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" tsrange not null');
     }
 
-    public function testAddingTstzrangeColumn(): void
+    #[Test]
+    public function addingTstzrangeColumn(): void
     {
         $this->blueprint->tstzrange('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" tstzrange not null');
     }
 
-    public function testAddingDaterangeColumn(): void
+    #[Test]
+    public function addingDaterangeColumn(): void
     {
         $this->blueprint->daterange('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" daterange not null');
     }
 
-    public function testAddingNumericColumnWithVariablePrecicion(): void
+    #[Test]
+    public function addingNumericColumnWithVariablePrecicion(): void
     {
         $this->blueprint->numeric('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" numeric not null');
     }
 
-    public function testAddingNumericColumnWithDefinedPrecicion(): void
+    #[Test]
+    public function addingNumericColumnWithDefinedPrecicion(): void
     {
         $this->blueprint->numeric('foo', 8);
         $this->assertSameSql('alter table "test_table" add column "foo" numeric(8) not null');
     }
 
-    public function testAddingNumericColumnWithDefinedPrecicionAndScope(): void
+    #[Test]
+    public function addingNumericColumnWithDefinedPrecicionAndScope(): void
     {
         $this->blueprint->numeric('foo', 8, 2);
         $this->assertSameSql('alter table "test_table" add column "foo" numeric(8, 2) not null');

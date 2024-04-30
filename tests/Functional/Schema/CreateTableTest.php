@@ -10,6 +10,7 @@ use Fuwasegu\Postgres\Schema\Blueprint;
 use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -24,7 +25,8 @@ final class CreateTableTest extends FunctionalTestCase
 
     use TableAssertions;
 
-    public function testCreateSimple(): void
+    #[Test]
+    public function createSimple(): void
     {
         Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
@@ -38,7 +40,8 @@ final class CreateTableTest extends FunctionalTestCase
         $this->seeTable('test_table');
     }
 
-    public function testColumnAssertions(): void
+    #[Test]
+    public function columnAssertions(): void
     {
         Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
@@ -62,7 +65,8 @@ final class CreateTableTest extends FunctionalTestCase
         $this->assertCommentOnColumn('test_table', 'name');
     }
 
-    public function testCreateViaLike(): void
+    #[Test]
+    public function createViaLike(): void
     {
         Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
@@ -78,7 +82,8 @@ final class CreateTableTest extends FunctionalTestCase
         $this->assertCompareTables('test_table', 'test_table2');
     }
 
-    public function testCreateViaLikeIncludingAll(): void
+    #[Test]
+    public function createViaLikeIncludingAll(): void
     {
         Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');

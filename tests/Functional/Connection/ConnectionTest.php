@@ -16,6 +16,7 @@ use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
 use PHPUnit\Framework\Attributes\DataProvider;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -30,14 +31,16 @@ final class ConnectionTest extends FunctionalTestCase
 
     protected $emulatePrepares = true;
 
-    public function testConnectionFactory(): void
+    #[Test]
+    public function connectionFactory(): void
     {
         $factory = new ConnectionFactory(app());
 
         $this->assertInstanceOf(SQLiteConnection::class, $factory->make(config('database.connections.sqlite')));
     }
 
-    public function testResolverFor(): void
+    #[Test]
+    public function resolverFor(): void
     {
         Connection::resolverFor('sqlite', static fn($connection, $database, $prefix, $config) => new CustomSQLiteConnection($connection, $database, $prefix, $config));
 
@@ -53,7 +56,8 @@ final class ConnectionTest extends FunctionalTestCase
      * @param mixed $value
      */
     #[DataProvider('provideBoolTrueBindingsWorksCases')]
-    public function testBoolTrueBindingsWorks($value): void
+    #[Test]
+    public function boolTrueBindingsWorks($value): void
     {
         $table = 'test_table';
         $data = [
@@ -71,8 +75,9 @@ final class ConnectionTest extends FunctionalTestCase
     /**
      * @param mixed $value
      */
+    #[Test]
     #[DataProvider('provideIntBindingsWorksCases')]
-    public function testIntBindingsWorks($value): void
+    public function intBindingsWorks($value): void
     {
         $table = 'test_table';
         $data = [
@@ -87,7 +92,8 @@ final class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    public function testStringBindingsWorks(): void
+    #[Test]
+    public function stringBindingsWorks(): void
     {
         $table = 'test_table';
         $data = [
@@ -102,7 +108,8 @@ final class ConnectionTest extends FunctionalTestCase
         $this->assertSame(1, $result->count());
     }
 
-    public function testNullBindingsWorks(): void
+    #[Test]
+    public function nullBindingsWorks(): void
     {
         $table = 'test_table';
         $data = [
@@ -122,7 +129,8 @@ final class ConnectionTest extends FunctionalTestCase
      * @param mixed $value
      */
     #[DataProvider('provideDateTimeBindingsWorksCases')]
-    public function testDateTimeBindingsWorks($value): void
+    #[Test]
+    public function dateTimeBindingsWorks($value): void
     {
         $table = 'test_table';
         $data = [

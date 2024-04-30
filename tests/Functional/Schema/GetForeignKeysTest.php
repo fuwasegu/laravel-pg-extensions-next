@@ -9,6 +9,7 @@ use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 use Override;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -54,7 +55,8 @@ final class GetForeignKeysTest extends FunctionalTestCase
         parent::tearDown();
     }
 
-    public function testGetForeignKeys(): void
+    #[Test]
+    public function getForeignKeys(): void
     {
         $foreignKeys = Schema::getForeignKeys('test_table');
 

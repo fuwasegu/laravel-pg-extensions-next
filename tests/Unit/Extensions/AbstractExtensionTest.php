@@ -13,6 +13,7 @@ use Fuwasegu\Postgres\Tests\TestCase;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Override;
+use PHPUnit\Framework\Attributes\Test;
 
 /**
  * @internal
@@ -21,7 +22,8 @@ use Override;
  */
 final class AbstractExtensionTest extends TestCase
 {
-    public function testRegisterInvalidExtension(): void
+    #[Test]
+    public function registerInvalidExtension(): void
     {
         $abstractExtension = new ExtensionStub();
 
@@ -31,7 +33,8 @@ final class AbstractExtensionTest extends TestCase
         $abstractExtension::register();
     }
 
-    public function testRegisterWithInvalidMixin(): void
+    #[Test]
+    public function registerWithInvalidMixin(): void
     {
         $abstractExtension = new InvalidExtensionStub();
 
