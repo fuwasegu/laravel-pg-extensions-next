@@ -51,3 +51,6 @@ jobs:
 
       - name: Rector
         run: composer rector
+
+      - name: Test
+        run: composer test
