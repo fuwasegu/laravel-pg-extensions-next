@@ -5,38 +5,43 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres\Unit\Schema\Blueprint;
 
 use Closure;
-use Generator;
 use Fuwasegu\Postgres\Schema\Blueprint;
 use Fuwasegu\Postgres\Tests\TestCase;
 use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
+use Override;
 
-class IndexTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class IndexTest extends TestCase
 {
     use BlueprintAssertions;
 
     private const TABLE = 'test_table';
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->initializeMock(static::TABLE);
+        $this->initializeMock(self::TABLE);
     }
 
     /**
-     * @test
-     * @dataProvider provideExcludeConstraints
+     * @dataProvider provideAddConstraintCases
      */
-    public function addConstraint(Closure $callback, string $expectedSQL): void
+    public function testAddConstraint(Closure $callback, string $expectedSQL): void
     {
         $callback($this->blueprint);
         $this->assertSameSql($expectedSQL);
     }
 
-    public function provideExcludeConstraints(): Generator
+    public static function provideAddConstraintCases(): iterable
     {
         yield [
-            static function (Blueprint $table) {
+            static function (Blueprint $table): void {
                 $table
                     ->exclude(['period_start', 'period_end'])
                     ->using('period_type_id', '=')
@@ -50,8 +55,9 @@ class IndexTest extends TestCase
                 'WHERE ("deleted_at" is null)',
             ]),
         ];
+
         yield [
-            static function (Blueprint $table) {
+            static function (Blueprint $table): void {
                 $table
                     ->exclude(['period_start', 'period_end'])
                     ->using('period_type_id', '=')
@@ -64,8 +70,9 @@ class IndexTest extends TestCase
                 'WHERE ("deleted_at" is null)',
             ]),
         ];
+
         yield [
-            static function (Blueprint $table) {
+            static function (Blueprint $table): void {
                 $table
                     ->exclude(['period_start', 'period_end'])
                     ->using('period_type_id', '=')
@@ -76,8 +83,9 @@ class IndexTest extends TestCase
                 'EXCLUDE (period_type_id WITH =, daterange(period_start, period_end) WITH &&)',
             ]),
         ];
+
         yield [
-            static function (Blueprint $table) {
+            static function (Blueprint $table): void {
                 $table
                     ->exclude(['period_start', 'period_end'])
                     ->using('period_type_id', '=')
@@ -90,8 +98,9 @@ class IndexTest extends TestCase
                 'USING INDEX TABLESPACE excludeSpace',
             ]),
         ];
+
         yield [
-            static function (Blueprint $table) {
+            static function (Blueprint $table): void {
                 $table
                     ->exclude(['period_start', 'period_end'])
                     ->using('period_type_id', '=')
@@ -105,8 +114,9 @@ class IndexTest extends TestCase
                 "WITH (some_arg = 1, any_arg = 'some_value')",
             ]),
         ];
+
         yield [
-            static function (Blueprint $table) {
+            static function (Blueprint $table): void {
                 $table
                     ->check(['period_start', 'period_end'])
                     ->whereColumn('period_end', '>', 'period_start')

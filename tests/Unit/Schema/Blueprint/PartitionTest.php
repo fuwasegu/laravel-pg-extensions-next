@@ -4,37 +4,38 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Unit\Schema\Blueprint;
 
-use Illuminate\Support\Carbon;
-use InvalidArgumentException;
 use Fuwasegu\Postgres\Tests\TestCase;
 use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
+use Illuminate\Support\Carbon;
+use InvalidArgumentException;
+use Override;
 
-class PartitionTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class PartitionTest extends TestCase
 {
     use BlueprintAssertions;
 
     private const TABLE = 'test_table';
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
 
-        $this->initializeMock(static::TABLE);
+        $this->initializeMock(self::TABLE);
     }
 
-    /**
-     * @test
-     */
-    public function detachPartition(): void
+    public function testDetachPartition(): void
     {
         $this->blueprint->detachPartition('some_partition');
         $this->assertSameSql('alter table "test_table" detach partition some_partition');
     }
 
-    /**
-     * @test
-     */
-    public function attachPartitionRangeInt(): void
+    public function testAttachPartitionRangeInt(): void
     {
         $this->blueprint->attachPartition('some_partition')
             ->range([
@@ -44,20 +45,14 @@ class PartitionTest extends TestCase
         $this->assertSameSql('alter table "test_table" attach partition some_partition for values from (10) to (100)');
     }
 
-    /**
-     * @test
-     */
-    public function attachPartitionFailedWithoutForValuesPart(): void
+    public function testAttachPartitionFailedWithoutForValuesPart(): void
     {
         $this->blueprint->attachPartition('some_partition');
         $this->expectException(InvalidArgumentException::class);
         $this->runToSql();
     }
 
-    /**
-     * @test
-     */
-    public function attachPartitionRangeDates(): void
+    public function testAttachPartitionRangeDates(): void
     {
         $today = Carbon::today();
         $tomorrow = Carbon::tomorrow();
@@ -70,14 +65,11 @@ class PartitionTest extends TestCase
         $this->assertSameSql(sprintf(
             'alter table "test_table" attach partition some_partition for values from (\'%s\') to (\'%s\')',
             $today->toDateTimeString(),
-            $tomorrow->toDateTimeString()
+            $tomorrow->toDateTimeString(),
         ));
     }
 
-    /**
-     * @test
-     */
-    public function attachPartitionStringDates(): void
+    public function testAttachPartitionStringDates(): void
     {
         $today = '2010-01-01';
         $tomorrow = '2010-12-31';
@@ -90,59 +82,41 @@ class PartitionTest extends TestCase
         $this->assertSameSql(sprintf(
             'alter table "test_table" attach partition some_partition for values from (\'%s\') to (\'%s\')',
             $today,
-            $tomorrow
+            $tomorrow,
         ));
     }
 
-    /**
-     * @test
-     */
-    public function addingTsrangeColumn()
+    public function testAddingTsrangeColumn(): void
     {
         $this->blueprint->tsrange('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" tsrange not null');
     }
 
-    /**
-     * @test
-     */
-    public function addingTstzrangeColumn()
+    public function testAddingTstzrangeColumn(): void
     {
         $this->blueprint->tstzrange('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" tstzrange not null');
     }
 
-    /**
-     * @test
-     */
-    public function addingDaterangeColumn()
+    public function testAddingDaterangeColumn(): void
     {
         $this->blueprint->daterange('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" daterange not null');
     }
 
-    /**
-     * @test
-     */
-    public function addingNumericColumnWithVariablePrecicion()
+    public function testAddingNumericColumnWithVariablePrecicion(): void
     {
         $this->blueprint->numeric('foo');
         $this->assertSameSql('alter table "test_table" add column "foo" numeric not null');
     }
 
-    /**
-     * @test
-     */
-    public function addingNumericColumnWithDefinedPrecicion()
+    public function testAddingNumericColumnWithDefinedPrecicion(): void
     {
         $this->blueprint->numeric('foo', 8);
         $this->assertSameSql('alter table "test_table" add column "foo" numeric(8) not null');
     }
 
-    /**
-     * @test
-     */
-    public function addingNumericColumnWithDefinedPrecicionAndScope()
+    public function testAddingNumericColumnWithDefinedPrecicionAndScope(): void
     {
         $this->blueprint->numeric('foo', 8, 2);
         $this->assertSameSql('alter table "test_table" add column "foo" numeric(8, 2) not null');

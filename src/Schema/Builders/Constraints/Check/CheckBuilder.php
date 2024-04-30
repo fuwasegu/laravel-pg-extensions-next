@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Schema\Builders\Constraints\Check;
 
-use Illuminate\Support\Fluent;
 use Fuwasegu\Postgres\Schema\Builders\WhereBuilderTrait;
+use Illuminate\Support\Fluent;
 
 class CheckBuilder extends Fluent
 {

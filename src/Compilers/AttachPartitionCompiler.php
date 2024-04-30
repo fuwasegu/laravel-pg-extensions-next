@@ -18,7 +18,7 @@ class AttachPartitionCompiler
             'alter table %s attach partition %s %s',
             $grammar->wrapTable($blueprint),
             $command->get('partition'),
-            self::compileForValues($command)
+            self::compileForValues($command),
         );
     }
 
@@ -28,6 +28,7 @@ class AttachPartitionCompiler
         if ($range) {
             $from = self::formatValue($range['from']);
             $to = self::formatValue($range['to']);
+
             return "for values from ({$from}) to ({$to})";
         }
 
@@ -40,7 +41,7 @@ class AttachPartitionCompiler
             return "'{$value->toDateTimeString()}'";
         }
 
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return "'{$value}'";
         }
 

@@ -4,10 +4,10 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Compilers;
 
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Database\Schema\Grammars\Grammar;
 use Fuwasegu\Postgres\Compilers\Traits\WheresBuilder;
 use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Database\Schema\Grammars\Grammar;
 
 class CheckCompiler
 {
@@ -21,7 +21,7 @@ class CheckCompiler
             'ALTER TABLE %s ADD CONSTRAINT %s CHECK (%s)',
             $blueprint->getTable(),
             $command->get('index'),
-            static::removeLeadingBoolean(implode(' ', $wheres))
+            static::removeLeadingBoolean(implode(' ', $wheres)),
         );
     }
 }

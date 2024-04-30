@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Extensions;
 
-use Illuminate\Support\Traits\Macroable;
 use Fuwasegu\Postgres\Extensions\Exceptions\MacroableMissedException;
 use Fuwasegu\Postgres\Extensions\Exceptions\MixinInvalidException;
+use Illuminate\Support\Traits\Macroable;
 
 /**
  * @codeCoverageIgnore
@@ -24,18 +24,18 @@ abstract class AbstractExtension extends AbstractComponent
 
     final public static function register(): void
     {
-        collect(static::getMixins())->each(static function ($extension, $mixin) {
+        collect(static::getMixins())->each(static function ($extension, $mixin): void {
             if (! is_subclass_of($mixin, AbstractComponent::class)) {
                 throw new MixinInvalidException(sprintf(
                     'Mixed class %s is not descendant of %s.',
                     $mixin,
-                    AbstractComponent::class
+                    AbstractComponent::class,
                 ));
             }
             if (! method_exists($extension, 'mixin')) {
                 throw new MacroableMissedException(sprintf('Class %s doesn’t use Macroable Trait.', $extension));
             }
-            /** @var Macroable $extension */
+            // @var Macroable $extension
             $extension::mixin(new $mixin());
         });
     }

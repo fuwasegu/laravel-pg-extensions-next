@@ -7,8 +7,14 @@ namespace Fuwasegu\Postgres\Unit\Schema\Types;
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Fuwasegu\Postgres\Schema\Types\DateRangeType;
 use Fuwasegu\Postgres\Tests\TestCase;
+use Override;
 
-class DateRangeTypeTest extends TestCase
+/**
+ * @internal
+ *
+ * @coversNothing
+ */
+final class DateRangeTypeTest extends TestCase
 {
     /**
      * @var AbstractPlatform
@@ -20,6 +26,7 @@ class DateRangeTypeTest extends TestCase
      */
     private $type;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -31,18 +38,12 @@ class DateRangeTypeTest extends TestCase
         $this->abstractPlatform = $this->getMockForAbstractClass(AbstractPlatform::class);
     }
 
-    /**
-     * @test
-     */
-    public function getSQLDeclaration(): void
+    public function testGetSQLDeclaration(): void
     {
         $this->assertSame(DateRangeType::TYPE_NAME, $this->type->getSQLDeclaration([], $this->abstractPlatform));
     }
 
-    /**
-     * @test
-     */
-    public function getTypeName(): void
+    public function testGetTypeName(): void
     {
         $this->assertSame(DateRangeType::TYPE_NAME, $this->type->getName());
     }

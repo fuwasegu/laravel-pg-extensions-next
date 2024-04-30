@@ -4,17 +4,17 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Tests\Unit\Helpers;
 
-use PHPUnit\Framework\TestCase;
 use Fuwasegu\Postgres\PostgresConnection;
 use Fuwasegu\Postgres\Schema\Blueprint;
 use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @mixin TestCase
  *
- * @property Blueprint $blueprint
+ * @property Blueprint          $blueprint
  * @property PostgresConnection $postgresConnection
- * @property PostgresGrammar $postgresGrammar
+ * @property PostgresGrammar    $postgresGrammar
  */
 trait BlueprintAssertions
 {
@@ -24,7 +24,7 @@ trait BlueprintAssertions
 
     protected $postgresGrammar;
 
-    public function initializeMock(string $table)
+    public function initializeMock(string $table): void
     {
         $this->blueprint = new Blueprint($table);
         $this->postgresConnection = $this->createMock(PostgresConnection::class);
@@ -32,11 +32,11 @@ trait BlueprintAssertions
     }
 
     /**
-     * @param string|array $sql
+     * @param array|string $sql
      */
     protected function assertSameSql($sql): void
     {
-        $this->assertSame((array) $sql, $this->runToSql());
+        $this->assertSame((array)$sql, $this->runToSql());
     }
 
     protected function assertRegExpSql(string $regexpExpected): void

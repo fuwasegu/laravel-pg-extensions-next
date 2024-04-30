@@ -1,0 +1,13 @@
+parameters:
+
+    level: 0
+
+    tmpDir: .cache/phpstan
+
+    paths:
+        - src/
+        - tests/
+
+    checkMissingOverrideMethodAttribute: true
+
+    checkGenericClassInNonGenericObjectType: false

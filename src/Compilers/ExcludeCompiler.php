@@ -4,11 +4,11 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Compilers;
 
+use Fuwasegu\Postgres\Compilers\Traits\WheresBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Fluent;
-use Fuwasegu\Postgres\Compilers\Traits\WheresBuilder;
-use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 
 class ExcludeCompiler
 {
@@ -29,9 +29,7 @@ class ExcludeCompiler
     private static function compileExclude(Fluent $command): string
     {
         $items = collect($command->get('using'))
-            ->map(static function ($operator, $excludeElement) {
-                return sprintf('%s WITH %s', $excludeElement, $operator);
-            });
+            ->map(static fn($operator, $excludeElement) => sprintf('%s WITH %s', $excludeElement, $operator));
 
         return implode(', ', $items->toArray());
     }
@@ -39,9 +37,7 @@ class ExcludeCompiler
     private static function compileWith(Fluent $command): ?string
     {
         $items = collect($command->get('with'))
-            ->map(static function ($value, $storageParameter) {
-                return sprintf('%s = %s', $storageParameter, static::wrapValue($value));
-            });
+            ->map(static fn($value, $storageParameter) => sprintf('%s = %s', $storageParameter, static::wrapValue($value)));
 
         if ($items->count() > 0) {
             return sprintf('WITH (%s)', implode(', ', $items->toArray()));
@@ -72,7 +68,7 @@ class ExcludeCompiler
     {
         $wheres = static::build($grammar, $blueprint, $command);
 
-        if (! empty($wheres)) {
+        if ($wheres !== []) {
             return sprintf('WHERE %s', static::removeLeadingBoolean(implode(' ', $wheres)));
         }
 

@@ -4,12 +4,14 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Connectors;
 
+use Fuwasegu\Postgres\PostgresConnection;
 use Illuminate\Database\Connection;
 use Illuminate\Database\Connectors\ConnectionFactory as ConnectionFactoryBase;
-use Fuwasegu\Postgres\PostgresConnection;
+use Override;
 
 class ConnectionFactory extends ConnectionFactoryBase
 {
+    #[Override]
     protected function createConnection($driver, $connection, $database, $prefix = '', array $config = [])
     {
         $resolver = Connection::getResolver($driver);

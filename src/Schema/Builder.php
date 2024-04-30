@@ -7,6 +7,7 @@ namespace Fuwasegu\Postgres\Schema;
 use Closure;
 use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
 use Illuminate\Support\Traits\Macroable;
+use Override;
 
 class Builder extends BasePostgresBuilder
 {
@@ -28,14 +29,16 @@ class Builder extends BasePostgresBuilder
         $this->build($blueprint);
     }
 
+    #[Override]
     public function hasView($view): bool
     {
-        return count($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
+        return \count($this->connection->selectFromWriteConnection($this->grammar->compileViewExists(), [
             $this->connection->getConfig()['schema'],
             $this->connection->getTablePrefix() . $view,
         ])) > 0;
     }
 
+    #[Override]
     public function getForeignKeys($tableName): array
     {
         return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($tableName));
@@ -47,14 +50,17 @@ class Builder extends BasePostgresBuilder
             $this->connection->getConfig()['schema'],
             $this->connection->getTablePrefix() . $view,
         ]);
-        return count($results) > 0 ? $results[0]->view_definition : '';
+
+        return \count($results) > 0 ? $results[0]->view_definition : '';
     }
 
     /**
      * @param string $table
+     *
      * @return Blueprint|\Illuminate\Database\Schema\Blueprint
      */
-    protected function createBlueprint($table, Closure $callback = null)
+    #[Override]
+    protected function createBlueprint($table, ?Closure $callback = null)
     {
         return new Blueprint($table, $callback);
     }

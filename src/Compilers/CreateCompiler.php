@@ -19,7 +19,7 @@ class CreateCompiler
             $grammar->wrapTable($blueprint),
             $commands['like']
                 ? self::compileLike($grammar, $commands['like'])
-                : self::compileColumns($columns)
+                : self::compileColumns($columns),
         );
 
         return str_replace('  ', ' ', trim($compiledCommand));
@@ -27,13 +27,14 @@ class CreateCompiler
 
     private static function beforeTable(?Fluent $command = null): string
     {
-        return $command ? 'if not exists' : '';
+        return $command instanceof Fluent ? 'if not exists' : '';
     }
 
     private static function compileLike(Grammar $grammar, Fluent $command): string
     {
         $table = $command->get('table');
         $includingAll = $command->get('includingAll') ? ' including all' : '';
+
         return "like {$grammar->wrapTable($table)}{$includingAll}";
     }
 

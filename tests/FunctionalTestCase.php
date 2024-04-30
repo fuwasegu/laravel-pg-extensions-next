@@ -5,12 +5,14 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres\Tests;
 
 use Illuminate\Support\Facades\Facade;
+use Override;
 use PDO;
 
 abstract class FunctionalTestCase extends TestCase
 {
     protected $emulatePrepares = false;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -18,6 +20,7 @@ abstract class FunctionalTestCase extends TestCase
         Facade::clearResolvedInstances();
     }
 
+    #[Override]
     protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
@@ -28,7 +31,7 @@ abstract class FunctionalTestCase extends TestCase
         $app['config']->set('database.connections.main', [
             'driver' => 'pgsql',
             'host' => $params['host'],
-            'port' => (int) $params['port'],
+            'port' => (int)$params['port'],
             'database' => $params['database'],
             'username' => $params['user'],
             'password' => $params['password'],

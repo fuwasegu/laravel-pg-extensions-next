@@ -13,9 +13,10 @@ use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\TableDiff;
 use Doctrine\DBAL\Types\BigIntType;
 use Doctrine\DBAL\Types\IntegerType;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
-use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use Override;
 
 final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 {
@@ -26,12 +27,13 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         $sql = $this->getAlterTableChangeColumnSQL(
             $event->getPlatform(),
             $event->getTableDiff(),
-            $event->getColumnDiff()
+            $event->getColumnDiff(),
         );
 
         $event->addSql($sql->unique()->toArray());
     }
 
+    #[Override]
     public function getSubscribedEvents(): array
     {
         return [Events::onSchemaAlterTableChangeColumn];
@@ -40,7 +42,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
     public function getAlterTableChangeColumnSQL(
         AbstractPlatform $platform,
         TableDiff $diff,
-        ColumnDiff $columnDiff
+        ColumnDiff $columnDiff,
     ): Collection {
         $sql = new Collection();
 
@@ -71,7 +73,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
             $oldColumnName,
             $column
                 ->getType()
-                ->getSQLDeclaration($column->toArray(), $platform)
+                ->getSQLDeclaration($column->toArray(), $platform),
         ));
 
         return $sql;
@@ -82,7 +84,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         ColumnDiff $columnDiff,
         Column $column,
         string $quoteName,
-        Collection $sql
+        Collection $sql,
     ): void {
         $newComment = $this->getColumnComment($column);
         $oldComment = $this->getOldColumnComment($columnDiff);
@@ -99,14 +101,14 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        Collection $sql
+        Collection $sql,
     ): void {
         if ($columnDiff->hasChanged('notnull')) {
             $sql->add(sprintf(
                 'ALTER TABLE %s ALTER %s %s NOT NULL',
                 $quoteName,
                 $oldColumnName,
-                ($column->getNotnull() ? 'SET' : 'DROP')
+                $column->getNotnull() ? 'SET' : 'DROP',
             ));
         }
     }
@@ -117,7 +119,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        Collection $sql
+        Collection $sql,
     ): void {
         if ($columnDiff->hasChanged('default') || $this->typeChangeBreaksDefaultValue($columnDiff)) {
             $defaultClause = $column->getDefault() === null
@@ -134,7 +136,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        Collection $sql
+        Collection $sql,
     ): void {
         if (! $columnDiff->hasChanged('autoincrement')) {
             return;
@@ -142,6 +144,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
         if (! $column->getAutoincrement()) {
             $sql->add(sprintf('ALTER TABLE %s ALTER %s DROP DEFAULT', $quoteName, $oldColumnName));
+
             return;
         }
 
@@ -158,7 +161,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
         Column $column,
         string $quoteName,
         string $oldColumnName,
-        Collection $sql
+        Collection $sql,
     ): void {
         if (! $columnDiff->hasChanged('type')
             && ! $columnDiff->hasChanged('precision')
@@ -192,7 +195,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
             $quoteName,
             $oldColumnName,
             $typeName,
-            $using ?? ''
+            $using ?? '',
         )));
     }
 
@@ -218,7 +221,7 @@ final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 
     public function isNumericType(?Column $column): bool
     {
-        $type = $column ? $column->getType() : null;
+        $type = $column instanceof Column ? $column->getType() : null;
 
         return $type instanceof IntegerType || $type instanceof BigIntType;
     }

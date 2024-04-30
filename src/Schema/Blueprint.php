@@ -4,46 +4,36 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Schema;
 
-use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
-use Illuminate\Database\Schema\ColumnDefinition;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Fluent;
 use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
-use Fuwasegu\Postgres\Schema\Definitions\AttachPartitionDefinition;
 use Fuwasegu\Postgres\Schema\Definitions\CheckDefinition;
 use Fuwasegu\Postgres\Schema\Definitions\ExcludeDefinition;
-use Fuwasegu\Postgres\Schema\Definitions\LikeDefinition;
 use Fuwasegu\Postgres\Schema\Definitions\UniqueDefinition;
-use Fuwasegu\Postgres\Schema\Definitions\ViewDefinition;
 use Fuwasegu\Postgres\Schema\Types\DateRangeType;
 use Fuwasegu\Postgres\Schema\Types\TsRangeType;
 use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
+use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
+use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Fluent;
 
 class Blueprint extends BaseBlueprint
 {
     protected $commands = [];
 
-    /**
-     * @return AttachPartitionDefinition|Fluent
-     */
     public function attachPartition(string $partition): Fluent
     {
-        return $this->addCommand('attachPartition', compact('partition'));
+        return $this->addCommand('attachPartition', ['partition' => $partition]);
     }
 
     public function detachPartition(string $partition): void
     {
-        $this->addCommand('detachPartition', compact('partition'));
+        $this->addCommand('detachPartition', ['partition' => $partition]);
     }
 
-    /**
-     * @return LikeDefinition|Fluent
-     */
     public function like(string $table): Fluent
     {
-        return $this->addCommand('like', compact('table'));
+        return $this->addCommand('like', ['table' => $table]);
     }
 
     public function ifNotExists(): Fluent
@@ -53,18 +43,19 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return UniqueDefinition|UniqueBuilder
+     *
+     * @return UniqueBuilder|UniqueDefinition
      */
     public function uniquePartial($columns, ?string $index = null, ?string $algorithm = null): Fluent
     {
-        $columns = (array) $columns;
+        $columns = (array)$columns;
 
         $index = $index ?: $this->createIndexName('unique', $columns);
 
         return $this->addExtendedCommand(
             UniqueBuilder::class,
             'uniquePartial',
-            compact('columns', 'index', 'algorithm')
+            ['columns' => $columns, 'index' => $index, 'algorithm' => $algorithm],
         );
     }
 
@@ -75,28 +66,30 @@ class Blueprint extends BaseBlueprint
 
     /**
      * @param array|string $columns
-     * @return ExcludeDefinition|ExcludeBuilder
+     *
+     * @return ExcludeBuilder|ExcludeDefinition
      */
     public function exclude($columns, ?string $index = null): Fluent
     {
-        $columns = (array) $columns;
+        $columns = (array)$columns;
 
         $index = $index ?: $this->createIndexName('excl', $columns);
 
-        return $this->addExtendedCommand(ExcludeBuilder::class, 'exclude', compact('columns', 'index'));
+        return $this->addExtendedCommand(ExcludeBuilder::class, 'exclude', ['columns' => $columns, 'index' => $index]);
     }
 
     /**
      * @param array|string $columns
-     * @return CheckDefinition|CheckBuilder
+     *
+     * @return CheckBuilder|CheckDefinition
      */
     public function check($columns, ?string $index = null): Fluent
     {
-        $columns = (array) $columns;
+        $columns = (array)$columns;
 
         $index = $index ?: $this->createIndexName('chk', $columns);
 
-        return $this->addExtendedCommand(CheckBuilder::class, 'check', compact('columns', 'index'));
+        return $this->addExtendedCommand(CheckBuilder::class, 'check', ['columns' => $columns, 'index' => $index]);
     }
 
     public function dropExclude($index): Fluent
@@ -111,55 +104,41 @@ class Blueprint extends BaseBlueprint
 
     public function hasIndex($index, bool $unique = false): bool
     {
-        if (is_array($index)) {
+        if (\is_array($index)) {
             $index = $this->createIndexName($unique === false ? 'index' : 'unique', $index);
         }
 
-        return array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
+        return \array_key_exists($index, $this->getSchemaManager()->listTableIndexes($this->getTable()));
     }
 
-    /**
-     * @return ViewDefinition|Fluent
-     */
     public function createView(string $view, string $select, bool $materialize = false): Fluent
     {
-        return $this->addCommand('createView', compact('view', 'select', 'materialize'));
+        return $this->addCommand('createView', ['view' => $view, 'select' => $select, 'materialize' => $materialize]);
     }
 
     public function dropView(string $view): Fluent
     {
-        return $this->addCommand('dropView', compact('view'));
+        return $this->addCommand('dropView', ['view' => $view]);
     }
 
     /**
-     * Almost like 'decimal' type, but can be with variable precision (by default)
-     *
-     * @return Fluent|ColumnDefinition
+     * Almost like 'decimal' type, but can be with variable precision (by default).
      */
     public function numeric(string $column, ?int $precision = null, ?int $scale = null): Fluent
     {
-        return $this->addColumn('numeric', $column, compact('precision', 'scale'));
+        return $this->addColumn('numeric', $column, ['precision' => $precision, 'scale' => $scale]);
     }
 
-    /**
-     * @return Fluent|ColumnDefinition
-     */
     public function tsrange(string $column): Fluent
     {
         return $this->addColumn(TsRangeType::TYPE_NAME, $column);
     }
 
-    /**
-     * @return Fluent|ColumnDefinition
-     */
     public function tstzrange(string $column): Fluent
     {
         return $this->addColumn(TsTzRangeType::TYPE_NAME, $column);
     }
 
-    /**
-     * @return Fluent|ColumnDefinition
-     */
     public function daterange(string $column): Fluent
     {
         return $this->addColumn(DateRangeType::TYPE_NAME, $column);
@@ -172,8 +151,9 @@ class Blueprint extends BaseBlueprint
 
     private function addExtendedCommand(string $fluent, string $name, array $parameters = []): Fluent
     {
-        $command = new $fluent(array_merge(compact('name'), $parameters));
+        $command = new $fluent(array_merge(['name' => $name], $parameters));
         $this->commands[] = $command;
+
         return $command;
     }
 }
