@@ -4,6 +4,12 @@ This project extends Laravel's database layer to allow use specific Postgres fea
 > [!IMPORTANT]
 > This is a fork of the original [umbrellio/laravel-pg-extensions](https://github.com/umbrellio/laravel-pg-extensions) repository.
 
+## Requirements
+
+- PHP^8.3
+- Laravel^11.0
+- PostgreSQL^15
+
 ## Installation
 
 Run this command to install:
