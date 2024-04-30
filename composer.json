@@ -64,6 +64,7 @@
     "lint:fix": "@php php-cs-fixer fix",
     "stan": "@php phpstan analyse",
     "rector": "@php rector process src tests --dry-run",
-    "rector:fix": "@php rector process tests src"
+    "rector:fix": "@php rector process tests src",
+    "test": "@php phpunit"
   }
 }
