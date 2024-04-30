@@ -1,21 +1,11 @@
 # Laravel PG extensions
-
-[![Github Status](https://github.com/umbrellio/laravel-pg-extensions/workflows/CI/badge.svg)](https://github.com/umbrellio/laravel-pg-extensions/actions)
-[![Coverage Status](https://coveralls.io/repos/github/umbrellio/laravel-pg-extensions/badge.svg?branch=master)](https://coveralls.io/github/umbrellio/laravel-pg-extensions?branch=master)
-[![Latest Stable Version](https://poser.pugx.org/umbrellio/laravel-pg-extensions/v/stable.png)](https://packagist.org/packages/umbrellio/laravel-pg-extensions)
-[![Total Downloads](https://poser.pugx.org/umbrellio/laravel-pg-extensions/downloads.png)](https://packagist.org/packages/umbrellio/laravel-pg-extensions)
-[![Code Intelligence Status](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/code-intelligence.svg?b=master)](https://scrutinizer-ci.com/code-intelligence)
-[![Build Status](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/build.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/build-status/master)
-[![Code Coverage](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/coverage.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
-[![Scrutinizer Code Quality](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/badges/quality-score.png?b=master)](https://scrutinizer-ci.com/g/umbrellio/laravel-pg-extensions/?branch=master)
-
 This project extends Laravel's database layer to allow use specific Postgres features without raw queries. 
 
 ## Installation
 
 Run this command to install:
 ```bash
-composer require umbrellio/laravel-pg-extensions
+composer require fuwasegu/laravel-pg-extensions-next
 ```
 
 ## Features
@@ -215,12 +205,13 @@ Schema::table('some_table', function (Blueprint $table) {
 
 2). Add this package as a dependency in composer.
 
-3). Inherit the classes you intend to extend from abstract classes with namespace: `namespace Umbrellio\Postgres\Extensions`
+3). Inherit the classes you intend to extend from abstract classes with namespace: `namespace Fuwasegu\Postgres\Extensions`
 
 4). Implement extension methods in closures, example:
 
 ```php
-use Umbrellio\Postgres\Extensions\Schema\AbstractBlueprint;
+use Fuwasegu\Postgres\Extensions\Schema\AbstractBlueprint;
+
 class SomeBlueprint extends AbstractBlueprint
 {
    public function someMethod()
@@ -235,10 +226,10 @@ class SomeBlueprint extends AbstractBlueprint
 5). Create Extension class and mix these methods using the following syntax, ex:
 
 ```php
-use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Extensions\AbstractExtension;
+use Fuwasegu\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\Extensions\AbstractExtension;
 
 class SomeExtension extends AbstractExtension
 {
@@ -271,7 +262,7 @@ class SomeExtension extends AbstractExtension
 
 ```php
 use Illuminate\Support\ServiceProvider;
-use Umbrellio\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\PostgresConnection;
 
 class SomeServiceProvider extends ServiceProvider
 {
@@ -282,31 +273,22 @@ class SomeServiceProvider extends ServiceProvider
 }
 ```
 
-## TODO features
-
- - Extend `CreateCommand` with `inherits` and `partition by`
- - Extend working with partitions
- - COPY support
- - DISTINCT on specific columns
- - INSERT ON CONFLICT support
- - ...
- 
 ## License
 
 Released under MIT License.
 
-## Authors
+## About This Fork
 
-Created by Vitaliy Lazeev & Korben Dallas.
+This is a fork of the original [umbrellio/laravel-pg-extensions](https://github.com/umbrellio/laravel-pg-extensions) repository.
 
-## Contributing
+- This project is a fork and will be maintained independently from the original repository.
+- Backwards compatibility with the original project is not guaranteed.
+- This fork will be actively maintained and updated separately.
 
-- Fork it ( https://github.com/umbrellio/laravel-pg-extensions )
-- Create your feature branch (`git checkout -b feature/my-new-feature`)
-- Commit your changes (`git commit -am 'Add some feature'`)
-- Push to the branch (`git push origin feature/my-new-feature`)
-- Create new Pull Request
+## Reason for Forking
 
-<a href="https://github.com/umbrellio/">
-<img style="float: left;" src="https://umbrellio.github.io/Umbrellio/supported_by_umbrellio.svg" alt="Supported by Umbrellio" width="439" height="72">
-</a>
+The main reason for forking was due to a lack of proper maintenance on the original project repository. Some key issues included:
+
+- Releases containing bugs and issues.
+- Failure to keep up with Laravel version upgrades and changes.
+- Overall lack of active development and maintenance.
