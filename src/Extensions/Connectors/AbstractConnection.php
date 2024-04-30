@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Extensions\Connectors;
+namespace Fuwasegu\Postgres\Extensions\Connectors;
 
-use Umbrellio\Postgres\Extensions\AbstractComponent;
-use Umbrellio\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\Extensions\AbstractComponent;
+use Fuwasegu\Postgres\PostgresConnection;
 
 /**
  * @mixin PostgresConnection

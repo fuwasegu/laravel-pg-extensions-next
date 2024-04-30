@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema;
+namespace Fuwasegu\Postgres\Schema;
 
 use Closure;
 use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;

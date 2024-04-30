@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema\Types;
+namespace Fuwasegu\Postgres\Unit\Schema\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
-use Umbrellio\Postgres\Tests\TestCase;
+use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
+use Fuwasegu\Postgres\Tests\TestCase;
 
 class TsTzRangeTypeTest extends TestCase
 {

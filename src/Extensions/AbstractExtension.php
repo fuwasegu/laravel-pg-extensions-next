@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Extensions;
+namespace Fuwasegu\Postgres\Extensions;
 
 use Illuminate\Support\Traits\Macroable;
-use Umbrellio\Postgres\Extensions\Exceptions\MacroableMissedException;
-use Umbrellio\Postgres\Extensions\Exceptions\MixinInvalidException;
+use Fuwasegu\Postgres\Extensions\Exceptions\MacroableMissedException;
+use Fuwasegu\Postgres\Extensions\Exceptions\MixinInvalidException;
 
 /**
  * @codeCoverageIgnore

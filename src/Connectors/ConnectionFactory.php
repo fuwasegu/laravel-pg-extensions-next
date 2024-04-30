@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Connectors;
+namespace Fuwasegu\Postgres\Connectors;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\Connectors\ConnectionFactory as ConnectionFactoryBase;
-use Umbrellio\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\PostgresConnection;
 
 class ConnectionFactory extends ConnectionFactoryBase
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres;
+namespace Fuwasegu\Postgres;
 
 use DateTimeInterface;
 use Doctrine\DBAL\Connection;
@@ -11,14 +11,14 @@ use Illuminate\Database\PostgresConnection as BasePostgresConnection;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Traits\Macroable;
 use PDO;
-use Umbrellio\Postgres\Extensions\AbstractExtension;
-use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
-use Umbrellio\Postgres\Schema\Builder;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
-use Umbrellio\Postgres\Schema\Types\NumericType;
-use Umbrellio\Postgres\Schema\Types\TsRangeType;
-use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
+use Fuwasegu\Postgres\Extensions\AbstractExtension;
+use Fuwasegu\Postgres\Extensions\Exceptions\ExtensionInvalidException;
+use Fuwasegu\Postgres\Schema\Builder;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
+use Fuwasegu\Postgres\Schema\Types\NumericType;
+use Fuwasegu\Postgres\Schema\Types\TsRangeType;
+use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresConnection extends BasePostgresConnection
 {

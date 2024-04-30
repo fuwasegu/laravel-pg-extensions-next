@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Grammars;
+namespace Fuwasegu\Postgres\Schema\Grammars;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
-use Umbrellio\Postgres\Compilers\CheckCompiler;
-use Umbrellio\Postgres\Compilers\CreateCompiler;
-use Umbrellio\Postgres\Compilers\ExcludeCompiler;
-use Umbrellio\Postgres\Compilers\UniqueCompiler;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
-use Umbrellio\Postgres\Schema\Types\DateRangeType;
-use Umbrellio\Postgres\Schema\Types\NumericType;
-use Umbrellio\Postgres\Schema\Types\TsRangeType;
-use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
+use Fuwasegu\Postgres\Compilers\AttachPartitionCompiler;
+use Fuwasegu\Postgres\Compilers\CheckCompiler;
+use Fuwasegu\Postgres\Compilers\CreateCompiler;
+use Fuwasegu\Postgres\Compilers\ExcludeCompiler;
+use Fuwasegu\Postgres\Compilers\UniqueCompiler;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
+use Fuwasegu\Postgres\Schema\Types\DateRangeType;
+use Fuwasegu\Postgres\Schema\Types\NumericType;
+use Fuwasegu\Postgres\Schema\Types\TsRangeType;
+use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresGrammar extends BasePostgresGrammar
 {

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional\Schema;
+namespace Fuwasegu\Postgres\Tests\Functional\Schema;
 
 use Closure;
 use Generator;
@@ -11,10 +11,10 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Helpers\IndexAssertions;
-use Umbrellio\Postgres\Helpers\TableAssertions;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\FunctionalTestCase;
+use Fuwasegu\Postgres\Helpers\IndexAssertions;
+use Fuwasegu\Postgres\Helpers\TableAssertions;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 
 class CreateIndexTest extends FunctionalTestCase
 {

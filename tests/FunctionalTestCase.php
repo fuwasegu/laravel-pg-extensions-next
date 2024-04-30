@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests;
+namespace Fuwasegu\Postgres\Tests;
 
 use Illuminate\Support\Facades\Facade;
 use PDO;

@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional;
+namespace Fuwasegu\Postgres\Tests\Functional\Schema;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Helpers\ViewAssertions;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\FunctionalTestCase;
+use Fuwasegu\Postgres\Helpers\ViewAssertions;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 
 class CreateViewTest extends FunctionalTestCase
 {

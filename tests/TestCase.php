@@ -2,15 +2,15 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests;
+namespace Fuwasegu\Postgres\Tests;
 
 use Orchestra\Testbench\TestCase as BaseTestCase;
-use Umbrellio\Postgres\UmbrellioPostgresProvider;
+use Fuwasegu\Postgres\PostgresExtensionsServiceProvider;
 
 abstract class TestCase extends BaseTestCase
 {
     protected function getPackageProviders($app): array
     {
-        return [UmbrellioPostgresProvider::class];
+        return [PostgresExtensionsServiceProvider::class];
     }
 }

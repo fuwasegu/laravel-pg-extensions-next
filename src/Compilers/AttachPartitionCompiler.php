@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Compilers;
+namespace Fuwasegu\Postgres\Compilers;
 
 use Carbon\Carbon;
 use Illuminate\Database\Schema\Blueprint;

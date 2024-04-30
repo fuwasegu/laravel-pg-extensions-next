@@ -2,16 +2,16 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Unit\Extensions;
+namespace Fuwasegu\Postgres\Tests\Unit\Extensions;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use Umbrellio\Postgres\Extensions\AbstractComponent;
-use Umbrellio\Postgres\Extensions\AbstractExtension;
-use Umbrellio\Postgres\Extensions\Exceptions\MacroableMissedException;
-use Umbrellio\Postgres\Extensions\Exceptions\MixinInvalidException;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\TestCase;
+use Fuwasegu\Postgres\Extensions\AbstractComponent;
+use Fuwasegu\Postgres\Extensions\AbstractExtension;
+use Fuwasegu\Postgres\Extensions\Exceptions\MacroableMissedException;
+use Fuwasegu\Postgres\Extensions\Exceptions\MixinInvalidException;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\TestCase;
 
 class AbstractExtensionTest extends TestCase
 {

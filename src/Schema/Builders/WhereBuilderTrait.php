@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Builders;
+namespace Fuwasegu\Postgres\Schema\Builders;
 
 use Illuminate\Support\Fluent;
 

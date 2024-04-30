@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Compilers;
+namespace Fuwasegu\Postgres\Compilers;
 
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
-use Umbrellio\Postgres\Compilers\Traits\WheresBuilder;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
+use Fuwasegu\Postgres\Compilers\Traits\WheresBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 
 class CheckCompiler
 {

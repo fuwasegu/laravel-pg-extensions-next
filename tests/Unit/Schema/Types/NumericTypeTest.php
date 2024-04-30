@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema\Types;
+namespace Fuwasegu\Postgres\Unit\Schema\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
-use Umbrellio\Postgres\Schema\Types\NumericType;
-use Umbrellio\Postgres\Tests\TestCase;
+use Fuwasegu\Postgres\Schema\Types\NumericType;
+use Fuwasegu\Postgres\Tests\TestCase;
 
 class NumericTypeTest extends TestCase
 {

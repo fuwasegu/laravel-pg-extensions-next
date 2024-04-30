@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Extensions\Schema\Grammar;
+namespace Fuwasegu\Postgres\Extensions\Schema\Grammar;
 
-use Umbrellio\Postgres\Extensions\AbstractComponent;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\Extensions\AbstractComponent;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
 
 /**
  * @mixin PostgresGrammar

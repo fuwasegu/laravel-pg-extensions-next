@@ -2,11 +2,11 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Compilers\Traits;
+namespace Fuwasegu\Postgres\Compilers\Traits;
 
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Schema\Blueprint;
 
 trait WheresBuilder
 {

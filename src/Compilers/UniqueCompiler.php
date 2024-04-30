@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Compilers;
+namespace Fuwasegu\Postgres\Compilers;
 
 use Illuminate\Database\Schema\Grammars\Grammar;
-use Umbrellio\Postgres\Compilers\Traits\WheresBuilder;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
+use Fuwasegu\Postgres\Compilers\Traits\WheresBuilder;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
 
 class UniqueCompiler
 {

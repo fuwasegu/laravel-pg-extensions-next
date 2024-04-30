@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional\Schema;
+namespace Fuwasegu\Postgres\Tests\Functional\Schema;
 
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Helpers\ColumnAssertions;
-use Umbrellio\Postgres\Helpers\TableAssertions;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\FunctionalTestCase;
+use Fuwasegu\Postgres\Helpers\ColumnAssertions;
+use Fuwasegu\Postgres\Helpers\TableAssertions;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 
 class CreateTableTest extends FunctionalTestCase
 {

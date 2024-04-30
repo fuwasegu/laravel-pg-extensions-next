@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema\Blueprint;
+namespace Fuwasegu\Postgres\Unit\Schema\Blueprint;
 
 use Illuminate\Support\Carbon;
 use InvalidArgumentException;
-use Umbrellio\Postgres\Tests\TestCase;
-use Umbrellio\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
+use Fuwasegu\Postgres\Tests\TestCase;
+use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
 
 class PartitionTest extends TestCase
 {

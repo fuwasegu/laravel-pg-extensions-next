@@ -2,14 +2,14 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres;
+namespace Fuwasegu\Postgres;
 
 use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\DatabaseTransactionsManager;
-use Umbrellio\Postgres\Connectors\ConnectionFactory;
+use Fuwasegu\Postgres\Connectors\ConnectionFactory;
 
-class UmbrellioPostgresProvider extends DatabaseServiceProvider
+class PostgresExtensionsServiceProvider extends DatabaseServiceProvider
 {
     /**
      * @codeCoverageIgnore

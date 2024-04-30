@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Builders\Constraints\Exclude;
+namespace Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude;
 
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Builders\WhereBuilderTrait;
+use Fuwasegu\Postgres\Schema\Builders\WhereBuilderTrait;
 
 class ExcludeBuilder extends Fluent
 {

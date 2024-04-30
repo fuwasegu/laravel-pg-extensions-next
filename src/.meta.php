@@ -1,7 +1,7 @@
 <?php
 
 namespace Illuminate\Support\Facades {
-    use Umbrellio\Postgres\Schema\Definitions\ForeignKeyDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\ForeignKeyDefinition;
 
     /**
      * @method ForeignKeyDefinition[] getForeignKeys(string $tableName)
@@ -15,12 +15,12 @@ namespace Illuminate\Database\Schema {
 
     use Closure;
     use Illuminate\Support\Fluent;
-    use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
-    use Umbrellio\Postgres\Schema\Definitions\CheckDefinition;
-    use Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition;
-    use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
-    use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
-    use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\AttachPartitionDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\CheckDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\ExcludeDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\LikeDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\ViewDefinition;
+    use Fuwasegu\Postgres\Schema\Definitions\UniqueDefinition;
 
     /**
      * @method __construct($table, Closure $callback = null, $prefix = '')

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional\Connection;
+namespace Fuwasegu\Postgres\Tests\Functional\Connection;
 
 use Illuminate\Database\Connection;
 use Illuminate\Database\SQLiteConnection;
@@ -11,10 +11,10 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Connectors\ConnectionFactory;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\_data\CustomSQLiteConnection;
-use Umbrellio\Postgres\Tests\FunctionalTestCase;
+use Fuwasegu\Postgres\Connectors\ConnectionFactory;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\_data\CustomSQLiteConnection;
+use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 
 class ConnectionTest extends FunctionalTestCase
 {

@@ -2,24 +2,24 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema;
+namespace Fuwasegu\Postgres\Schema;
 
 use Illuminate\Database\Schema\Blueprint as BaseBlueprint;
 use Illuminate\Database\Schema\ColumnDefinition;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
-use Umbrellio\Postgres\Schema\Definitions\AttachPartitionDefinition;
-use Umbrellio\Postgres\Schema\Definitions\CheckDefinition;
-use Umbrellio\Postgres\Schema\Definitions\ExcludeDefinition;
-use Umbrellio\Postgres\Schema\Definitions\LikeDefinition;
-use Umbrellio\Postgres\Schema\Definitions\UniqueDefinition;
-use Umbrellio\Postgres\Schema\Definitions\ViewDefinition;
-use Umbrellio\Postgres\Schema\Types\DateRangeType;
-use Umbrellio\Postgres\Schema\Types\TsRangeType;
-use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
+use Fuwasegu\Postgres\Schema\Definitions\AttachPartitionDefinition;
+use Fuwasegu\Postgres\Schema\Definitions\CheckDefinition;
+use Fuwasegu\Postgres\Schema\Definitions\ExcludeDefinition;
+use Fuwasegu\Postgres\Schema\Definitions\LikeDefinition;
+use Fuwasegu\Postgres\Schema\Definitions\UniqueDefinition;
+use Fuwasegu\Postgres\Schema\Definitions\ViewDefinition;
+use Fuwasegu\Postgres\Schema\Types\DateRangeType;
+use Fuwasegu\Postgres\Schema\Types\TsRangeType;
+use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
 
 class Blueprint extends BaseBlueprint
 {

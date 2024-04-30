@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Unit\Schema\Blueprint;
+namespace Fuwasegu\Postgres\Unit\Schema\Blueprint;
 
 use Closure;
 use Generator;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\TestCase;
-use Umbrellio\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\TestCase;
+use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
 
 class IndexTest extends TestCase
 {

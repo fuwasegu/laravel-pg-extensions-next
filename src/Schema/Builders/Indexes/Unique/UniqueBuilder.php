@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Builders\Indexes\Unique;
+namespace Fuwasegu\Postgres\Schema\Builders\Indexes\Unique;
 
 use Illuminate\Support\Fluent;
 

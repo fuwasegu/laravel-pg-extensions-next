@@ -2,13 +2,13 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Unit\Subscribers;
+namespace Fuwasegu\Postgres\Tests\Functional\Subscribers;
 
 use Closure;
 use Codeception\Util\ReflectionHelper;
 use Doctrine\DBAL\Event\SchemaAlterTableChangeColumnEventArgs;
 use Doctrine\DBAL\Events;
-use Doctrine\DBAL\Platforms\PostgreSQL94Platform as PostgreSQLPlatform;
+use Doctrine\DBAL\Platforms\PostgreSQLPlatform;
 use Doctrine\DBAL\Schema\Column;
 use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\Comparator;
@@ -19,11 +19,11 @@ use Illuminate\Database\Query\Expression;
 use Illuminate\Database\Schema\Grammars\ChangeColumn;
 use Illuminate\Support\Facades\DB;
 use ReflectionMethod;
-use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
-use Umbrellio\Postgres\Tests\FunctionalTestCase;
+use Fuwasegu\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
+use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 
 /**
  * @property SchemaAlterTableChangeColumnSubscriber $subscriber

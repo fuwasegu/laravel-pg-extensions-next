@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Subscribers;
+namespace Fuwasegu\Postgres\Schema\Subscribers;
 
 use Doctrine\Common\EventSubscriber;
 use Doctrine\DBAL\Event\SchemaAlterTableChangeColumnEventArgs;
@@ -15,7 +15,7 @@ use Doctrine\DBAL\Types\BigIntType;
 use Doctrine\DBAL\Types\IntegerType;
 use Illuminate\Database\Query\Expression;
 use Illuminate\Support\Collection;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
 
 final class SchemaAlterTableChangeColumnSubscriber implements EventSubscriber
 {

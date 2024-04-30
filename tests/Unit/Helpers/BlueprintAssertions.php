@@ -2,12 +2,12 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Unit\Helpers;
+namespace Fuwasegu\Postgres\Tests\Unit\Helpers;
 
 use PHPUnit\Framework\TestCase;
-use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
 
 /**
  * @mixin TestCase

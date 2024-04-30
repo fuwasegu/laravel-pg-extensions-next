@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Helpers;
+namespace Fuwasegu\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
 
