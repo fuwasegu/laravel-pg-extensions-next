@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres\Schema;
 
 use Closure;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\SchemaException;
+use Fuwasegu\Postgres\PostgresConnection;
 use Illuminate\Database\Schema\PostgresBuilder as BasePostgresBuilder;
 use Illuminate\Support\Traits\Macroable;
 use Override;
@@ -61,5 +64,29 @@ class Builder extends BasePostgresBuilder
     protected function createBlueprint($table, ?Closure $callback = null): \Illuminate\Database\Schema\Blueprint|Blueprint
     {
         return new Blueprint($table, $callback);
+    }
+
+    /**
+     * Get the data type for the given column name.
+     *
+     * @param string $table
+     * @param string $column
+     * @param bool $fullDefinition
+     * @return string
+     * @throws Exception
+     * @throws SchemaException
+     */
+    public function getColumnType($table, $column, $fullDefinition = false): string
+    {
+        if ($this->connection instanceof PostgresConnection) {
+            $table = $this->connection->getTablePrefix().$table;
+
+            return $this->connection
+                ->getDoctrineColumn($table, $column)
+                ->getType()
+                ->getName();
+        }
+
+        return parent::getColumnType($table, $column, $fullDefinition);
     }
 }

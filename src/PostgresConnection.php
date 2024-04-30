@@ -8,6 +8,8 @@ use DateTimeInterface;
 use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
 use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\SchemaException;
 use Doctrine\DBAL\Types\Type;
 use Fuwasegu\Postgres\Extensions\AbstractExtension;
 use Fuwasegu\Postgres\Extensions\Exceptions\ExtensionInvalidException;
@@ -187,5 +189,16 @@ class PostgresConnection extends BasePostgresConnection
     public function getDoctrineSchemaManager(): AbstractSchemaManager
     {
         return $this->getDoctrineConnection()->createSchemaManager();
+    }
+
+    /**
+     * @throws Exception
+     * @throws SchemaException
+     */
+    public function getDoctrineColumn(string $table, string $column): Column
+    {
+        return $this->getDoctrineSchemaManager()
+            ->introspectTable($table)
+            ->getColumn($column);
     }
 }
