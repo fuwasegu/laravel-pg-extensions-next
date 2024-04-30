@@ -57,12 +57,12 @@ abstract class FunctionalTestCase extends TestCase
     private function getConnectionParams(): array
     {
         return [
-            'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
-            'user' => $GLOBALS['db_username'],
-            'password' => $GLOBALS['db_password'],
-            'host' => $GLOBALS['db_host'],
-            'database' => $GLOBALS['db_database'],
-            'port' => $GLOBALS['db_port'],
+            'driver' => $_ENV['DB_TYPE'] ?? 'pdo_pgsql',
+            'user' => $_ENV['DB_USERNAME'],
+            'password' => $_ENV['DB_PASSWORD'],
+            'host' => $_ENV['DB_HOST'],
+            'database' => $_ENV['DB_DATABASE'],
+            'port' => $_ENV['DB_PORT'],
         ];
     }
 }
