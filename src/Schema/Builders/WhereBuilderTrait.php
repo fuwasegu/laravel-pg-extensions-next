@@ -18,7 +18,7 @@ trait WhereBuilderTrait
         return $this->compileWhere('Raw', $boolean, ['sql' => $sql, 'bindings' => $bindings]);
     }
 
-    public function where(string $column, string $operator, string $value, string $boolean = 'and'): self
+    public function where(string $column, string $operator, mixed $value, string $boolean = 'and'): self
     {
         return $this->compileWhere('Basic', $boolean, ['column' => $column, 'operator' => $operator, 'value' => $value]);
     }

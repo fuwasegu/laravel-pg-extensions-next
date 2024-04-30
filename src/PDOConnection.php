@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres;
 
-
 use Doctrine\DBAL\Driver\Connection;
 use Doctrine\DBAL\Driver\PDO\Result;
 use Doctrine\DBAL\Driver\PDO\Statement;

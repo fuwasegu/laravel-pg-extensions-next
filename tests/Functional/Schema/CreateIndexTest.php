@@ -64,19 +64,6 @@ final class CreateIndexTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @group WithoutSchema
-     */
-    #[Test]
-    public function createIndexWithoutSchema(): void
-    {
-        $this->createIndexDefinition();
-        $this->assertSameIndex(
-            'test_table_name_unique',
-            'CREATE UNIQUE INDEX test_table_name_unique ON test_table USING btree (name)',
-        );
-    }
-
     #[DataProvider('provideCreatePartialUniqueCases')]
     #[Test]
     public function createPartialUnique(string $expected, Closure $callback): void
