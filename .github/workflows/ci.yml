@@ -23,7 +23,7 @@ jobs:
         env:
           POSTGRES_PASSWORD: ${{ env.DB_PASSWORD }}
           POSTGRES_USER: ${{ env.DB_USERNAME }}
-          POSTGRES_DB: ${{ env.DB_NAME }}
+          POSTGRES_DB: ${{ env.DB_DATABASE }}
         ports:
           - 5432:5432
 
