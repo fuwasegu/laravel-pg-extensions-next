@@ -14,27 +14,26 @@ use Doctrine\DBAL\Schema\ColumnDiff;
 use Doctrine\DBAL\Schema\Comparator;
 use Doctrine\DBAL\Schema\Table;
 use Doctrine\DBAL\Schema\TableDiff;
-use Generator;
-use Illuminate\Database\Query\Expression;
-use Illuminate\Database\Schema\Grammars\ChangeColumn;
-use Illuminate\Support\Facades\DB;
-use ReflectionMethod;
 use Fuwasegu\Postgres\PostgresConnection;
 use Fuwasegu\Postgres\Schema\Blueprint;
 use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
 use Fuwasegu\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
 use Fuwasegu\Postgres\Tests\FunctionalTestCase;
+use Illuminate\Database\Query\Expression;
+use Illuminate\Database\Schema\Grammars\ChangeColumn;
+use Illuminate\Support\Facades\DB;
+use ReflectionMethod;
 
 /**
  * @property SchemaAlterTableChangeColumnSubscriber $subscriber
- * @property PostgreSqlPlatform $platform
- * @property TableDiff $tableDiff
- * @property ColumnDiff $columnDiff
- * @property SchemaAlterTableChangeColumnEventArgs $eventArgs
- * @property Column[] $columns
- * @property Table $table
- * @property Blueprint $blueprint
- * @property PostgresGrammar $postgresGrammar
+ * @property PostgreSQLPlatform                     $platform
+ * @property TableDiff                              $tableDiff
+ * @property ColumnDiff                             $columnDiff
+ * @property SchemaAlterTableChangeColumnEventArgs  $eventArgs
+ * @property Column[]                               $columns
+ * @property Table                                  $table
+ * @property Blueprint                              $blueprint
+ * @property PostgresGrammar                        $postgresGrammar
  */
 class ChangeColumnSubscriberTest extends FunctionalTestCase
 {
@@ -63,7 +62,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         $this->blueprint = new Blueprint('some_table');
         $this->postgresGrammar = new PostgresGrammar();
         $this->subscriber = new SchemaAlterTableChangeColumnSubscriber();
-        $this->platform = new PostgreSqlPlatform();
+        $this->platform = new PostgreSQLPlatform();
     }
 
     /**
@@ -102,7 +101,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
         $this->assertSame($expectedSQL, $eventArgs->getSql());
     }
 
-    public function provideSchemas(): Generator
+    public static function provideSchemas(): iterable
     {
         yield $this->dropCommentCase();
         yield $this->changeCommentCase();
@@ -117,7 +116,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
 
     private function getEventArgsForColumn(
         string $columnName,
-        string $argumentName = 'tableColumn'
+        string $argumentName = 'tableColumn',
     ): SchemaAlterTableChangeColumnEventArgs {
         /** @var PostgresConnection $connection */
         $connection = DB::connection();
@@ -130,7 +129,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
                 '_getPortableTableColumnDefinition',
                 [
                     $argumentName => $listColumn,
-                ]
+                ],
             );
         }
 
@@ -140,7 +139,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
             $this->table,
             $this
                 ->getStaticMethod(ChangeColumn::class, 'getTableWithColumnChanges')
-                ->invoke(null, $this->blueprint, $this->table)
+                ->invoke(null, $this->blueprint, $this->table),
         );
 
         foreach ($this->tableDiff->changedColumns as $columnDiff) {
@@ -157,7 +156,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_comment',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->string($column)
                     ->nullable(false)
                     ->change();
@@ -170,7 +169,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_comment',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->string($column)
                     ->comment('new_comment')
                     ->change();
@@ -183,7 +182,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_integer_default',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->integer($column)
                     ->nullable()
                     ->change();
@@ -196,7 +195,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_integer_default',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->increments($column)
                     ->change();
             },
@@ -212,7 +211,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_key',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->integer($column)
                     ->change();
             },
@@ -227,7 +226,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_comment',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->string($column)
                     ->default('some_default')
                     ->change();
@@ -240,7 +239,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_comment',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->string($column)
                     ->default(new Expression("('some_string:' || some_comment)::character varying"))
                     ->change();
@@ -255,7 +254,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_integer_default',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table
                     ->text($column)
                     ->default(null)
@@ -273,7 +272,7 @@ class ChangeColumnSubscriberTest extends FunctionalTestCase
     {
         return [
             'some_comment',
-            function (Blueprint $table, string $column) {
+            function (Blueprint $table, string $column): void {
                 $table->string($column, 75)
                     ->change();
             },
