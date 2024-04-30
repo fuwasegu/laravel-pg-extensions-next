@@ -58,11 +58,11 @@ abstract class FunctionalTestCase extends TestCase
     {
         return [
             'driver' => $_ENV['DB_TYPE'] ?? 'pdo_pgsql',
-            'user' => $_ENV['DB_USERNAME'],
-            'password' => $_ENV['DB_PASSWORD'],
-            'host' => $_ENV['DB_HOST'],
-            'database' => $_ENV['DB_DATABASE'],
-            'port' => $_ENV['DB_PORT'],
+            'user' => $_ENV['DB_USERNAME'] ?? 'postgres',
+            'password' => $_ENV['DB_PASSWORD'] ?? 'postgres',
+            'host' => $_ENV['DB_HOST'] ?? '127.0.0.1',
+            'database' => $_ENV['DB_DATABASE'] ?? 'testing',
+            'port' => $_ENV['DB_PORT'] ?? '5432',
         ];
     }
 }
