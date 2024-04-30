@@ -5,18 +5,18 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres;
 
 use DateTimeInterface;
-use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Events;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Types\Type;
 use Fuwasegu\Postgres\Extensions\AbstractExtension;
 use Fuwasegu\Postgres\Extensions\Exceptions\ExtensionInvalidException;
 use Fuwasegu\Postgres\Schema\Builder;
 use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
-use Fuwasegu\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
 use Fuwasegu\Postgres\Schema\Types\NumericType;
 use Fuwasegu\Postgres\Schema\Types\TsRangeType;
 use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
+use Illuminate\Database\Grammar;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Grammars\PostgresGrammar as IlluminatePostgresGrammar;
 use Illuminate\Support\Traits\Macroable;
 use Override;
 use PDO;
@@ -25,22 +25,20 @@ class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
 
-    public $name;
+    private static array $extensions = [];
 
-    private static $extensions = [];
+    public array $doctrineTypes = [];
 
-    private $initialTypes = [
+    private array $initialTypes = [
         TsRangeType::TYPE_NAME => TsRangeType::class,
         TsTzRangeType::TYPE_NAME => TsTzRangeType::class,
         NumericType::TYPE_NAME => NumericType::class,
     ];
 
     /**
-     * @param AbstractExtension|string $extension
-     *
-     * @codeCoverageIgnore
+     * @throws ExtensionInvalidException
      */
-    final public static function registerExtension(string $extension): void
+    final public static function registerExtension(AbstractExtension|string $extension): void
     {
         if (! is_subclass_of($extension, AbstractExtension::class)) {
             throw new ExtensionInvalidException(sprintf(
@@ -53,7 +51,7 @@ class PostgresConnection extends BasePostgresConnection
     }
 
     #[Override]
-    public function getSchemaBuilder()
+    public function getSchemaBuilder(): Builder
     {
         if ($this->schemaGrammar === null) {
             $this->useDefaultSchemaGrammar();
@@ -71,14 +69,6 @@ class PostgresConnection extends BasePostgresConnection
         $this->registerInitialTypes();
     }
 
-    public function getDoctrineConnection(): Connection
-    {
-        $doctrineConnection = parent::getDoctrineConnection();
-        $this->overrideDoctrineBehavior($doctrineConnection);
-
-        return $doctrineConnection;
-    }
-
     #[Override]
     public function bindValues($statement, $bindings): void
     {
@@ -86,20 +76,11 @@ class PostgresConnection extends BasePostgresConnection
             foreach ($bindings as $key => $value) {
                 $parameter = \is_string($key) ? $key : $key + 1;
 
-                switch (true) {
-                    case \is_bool($value):
-                        $dataType = PDO::PARAM_BOOL;
-
-                        break;
-
-                    case $value === null:
-                        $dataType = PDO::PARAM_NULL;
-
-                        break;
-
-                    default:
-                        $dataType = PDO::PARAM_STR;
-                }
+                $dataType = match (true) {
+                    \is_bool($value) => PDO::PARAM_BOOL,
+                    $value === null => PDO::PARAM_NULL,
+                    default => PDO::PARAM_STR,
+                };
 
                 $statement->bindValue($parameter, $value, $dataType);
             }
@@ -109,7 +90,7 @@ class PostgresConnection extends BasePostgresConnection
     }
 
     #[Override]
-    public function prepareBindings(array $bindings)
+    public function prepareBindings(array $bindings): array
     {
         if ($this->getPdo()->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
             $grammar = $this->getQueryGrammar();
@@ -127,7 +108,7 @@ class PostgresConnection extends BasePostgresConnection
     }
 
     #[Override]
-    protected function getDefaultSchemaGrammar()
+    protected function getDefaultSchemaGrammar(): Grammar|IlluminatePostgresGrammar
     {
         return $this->withTablePrefix(new PostgresGrammar());
     }
@@ -135,34 +116,30 @@ class PostgresConnection extends BasePostgresConnection
     private function registerInitialTypes(): void
     {
         foreach ($this->initialTypes as $type => $typeClass) {
-            DB::registerDoctrineType($typeClass, $type, $type);
+            $this->registerDoctrineType($typeClass, $type, $type);
         }
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    public function registerDoctrineType(string $class, string $name, string $type): void
+    {
+        if (! Type::hasType($name)) {
+            try {
+                Type::addType($name, $class);
+            } catch (Exception) {
+            }
+        }
+
+        $this->doctrineTypes[$name] = [$type, $class];
+    }
+
     private function registerExtensions(): void
     {
-        collect(self::$extensions)->each(static function ($extension): void {
+        collect(self::$extensions)->each(function ($extension): void {
             // @var AbstractExtension $extension
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                DB::registerDoctrineType($typeClass, $type, $type);
+                $this->registerDoctrineType($typeClass, $type, $type);
             }
         });
-    }
-
-    private function overrideDoctrineBehavior(Connection $connection): Connection
-    {
-        $eventManager = $connection->getEventManager();
-        if (! $eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
-            $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
-        }
-        $connection
-            ->getDatabasePlatform()
-            ->setEventManager($eventManager);
-
-        return $connection;
     }
 }

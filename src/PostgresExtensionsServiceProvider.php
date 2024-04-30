@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres;
 
 use Fuwasegu\Postgres\Connectors\ConnectionFactory;
-use Illuminate\Database\DatabaseManager;
 use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\DatabaseTransactionsManager;
 use Override;
