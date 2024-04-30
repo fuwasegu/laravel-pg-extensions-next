@@ -37,7 +37,8 @@
   "require-dev": {
     "orchestra/testbench": "^9.0",
     "phpunit/phpunit": "^11.0",
-    "codeception/codeception": "^5.1"
+    "codeception/codeception": "^5.1",
+    "friendsofphp/php-cs-fixer": "^3.54"
   },
   "autoload": {
     "psr-4": {
@@ -55,5 +56,9 @@
         "Fuwasegu\\Postgres\\PostgresExtensionsServiceProvider"
       ]
     }
+  },
+  "scripts": {
+    "lint": "vendor/bin/php-cs-fixer fix --dry-run",
+    "lint:fix": "vendor/bin/php-cs-fixer fix"
   }
 }
