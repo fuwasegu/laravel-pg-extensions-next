@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres;
 
 use DateTimeInterface;
+use Doctrine\DBAL\Connection;
 use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
 use Doctrine\DBAL\Types\Type;
 use Fuwasegu\Postgres\Extensions\AbstractExtension;
 use Fuwasegu\Postgres\Extensions\Exceptions\ExtensionInvalidException;
@@ -28,6 +30,10 @@ class PostgresConnection extends BasePostgresConnection
     private static array $extensions = [];
 
     public array $doctrineTypes = [];
+
+    public ?Connection $doctrineConnection = null;
+
+    public array $doctrineTypeMappings = [];
 
     private array $initialTypes = [
         TsRangeType::TYPE_NAME => TsRangeType::class,
@@ -141,5 +147,44 @@ class PostgresConnection extends BasePostgresConnection
                 $this->registerDoctrineType($typeClass, $type, $type);
             }
         });
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getDoctrineConnection(): Connection
+    {
+        if (!$this->doctrineConnection instanceof Connection) {
+            $driver = $this->getDoctrineDriver();
+
+            $this->doctrineConnection = new Connection(array_filter([
+                'pdo' => $this->getPdo(),
+                'dbname' => $this->getDatabaseName(),
+                'driver' => $driver->getName(),
+                'serverVersion' => $this->getConfig('server_version'),
+            ]), $driver);
+
+            foreach ($this->doctrineTypeMappings as $name => $type) {
+                $this->doctrineConnection
+                    ->getDatabasePlatform()
+                    ->registerDoctrineTypeMapping($type, $name);
+            }
+        }
+        assert($this->doctrineConnection instanceof Connection);
+
+        return $this->doctrineConnection;
+    }
+
+    public function getDoctrineDriver(): PostgresDriver
+    {
+        return new PostgresDriver();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getDoctrineSchemaManager(): AbstractSchemaManager
+    {
+        return $this->getDoctrineConnection()->createSchemaManager();
     }
 }
