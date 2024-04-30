@@ -15,6 +15,7 @@ use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @internal
@@ -49,10 +50,9 @@ final class ConnectionTest extends FunctionalTestCase
     }
 
     /**
-     * @dataProvider provideBoolTrueBindingsWorksCases
-     *
      * @param mixed $value
      */
+    #[DataProvider('provideBoolTrueBindingsWorksCases')]
     public function testBoolTrueBindingsWorks($value): void
     {
         $table = 'test_table';
@@ -69,10 +69,9 @@ final class ConnectionTest extends FunctionalTestCase
     }
 
     /**
-     * @dataProvider provideIntBindingsWorksCases
-     *
      * @param mixed $value
      */
+    #[DataProvider('provideIntBindingsWorksCases')]
     public function testIntBindingsWorks($value): void
     {
         $table = 'test_table';
@@ -120,10 +119,9 @@ final class ConnectionTest extends FunctionalTestCase
     }
 
     /**
-     * @dataProvider provideDateTimeBindingsWorksCases
-     *
      * @param mixed $value
      */
+    #[DataProvider('provideDateTimeBindingsWorksCases')]
     public function testDateTimeBindingsWorks($value): void
     {
         $table = 'test_table';

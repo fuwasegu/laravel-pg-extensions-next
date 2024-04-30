@@ -9,6 +9,7 @@ use Fuwasegu\Postgres\Schema\Blueprint;
 use Fuwasegu\Postgres\Tests\TestCase;
 use Fuwasegu\Postgres\Tests\Unit\Helpers\BlueprintAssertions;
 use Override;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @internal
@@ -29,9 +30,7 @@ final class IndexTest extends TestCase
         $this->initializeMock(self::TABLE);
     }
 
-    /**
-     * @dataProvider provideAddConstraintCases
-     */
+    #[DataProvider('provideAddConstraintCases')]
     public function testAddConstraint(Closure $callback, string $expectedSQL): void
     {
         $callback($this->blueprint);

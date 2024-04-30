@@ -15,6 +15,7 @@ use Illuminate\Foundation\Testing\Concerns\InteractsWithDatabase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Schema;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 /**
  * @internal
@@ -77,9 +78,7 @@ final class CreateIndexTest extends FunctionalTestCase
         );
     }
 
-    /**
-     * @dataProvider provideCreatePartialUniqueCases
-     */
+    #[DataProvider('provideCreatePartialUniqueCases')]
     public function testCreatePartialUnique(string $expected, Closure $callback): void
     {
         Schema::create('test_table', static function (Blueprint $table) use ($callback): void {
