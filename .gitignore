@@ -5,3 +5,4 @@ phpunit.xml
 /build
 composer.lock
 /.cache
+/.phpunit.cache
