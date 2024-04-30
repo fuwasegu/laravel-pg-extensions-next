@@ -1,6 +1,9 @@
 # Laravel PG extensions
 This project extends Laravel's database layer to allow use specific Postgres features without raw queries. 
 
+> [!IMPORTANT]
+> This is a fork of the original [umbrellio/laravel-pg-extensions](https://github.com/umbrellio/laravel-pg-extensions) repository.
+
 ## Installation
 
 Run this command to install:
