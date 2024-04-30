@@ -1,4 +1,4 @@
-# Laravel PG extensions
+# Laravel PG extensions _NEXT_
 This project extends Laravel's database layer to allow use specific Postgres features without raw queries. 
 
 > [!IMPORTANT]
