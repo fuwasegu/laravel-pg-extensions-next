@@ -17,14 +17,14 @@ class PostgresDriver extends AbstractPostgreSQLDriver
         ?string $username = null,
         ?string $password = null,
         array $driverOptions = [],
-    ): PostgresConnection {
+    ): PDOConnection {
         $pdo = $params['pdo'] ?? null;
 
         if (!$pdo instanceof PDO) {
             throw new InvalidArgumentException('Laravel requires the "pdo" property to be set and be a PDO instance.');
         }
 
-        return new PostgresConnection($pdo);
+        return new PDOConnection($pdo);
     }
 
     public function getName(): string

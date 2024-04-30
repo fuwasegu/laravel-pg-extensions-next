@@ -13,8 +13,6 @@ class Builder extends BasePostgresBuilder
 {
     use Macroable;
 
-    public $name;
-
     public function createView(string $view, string $select, $materialize = false): void
     {
         $blueprint = $this->createBlueprint($view);
@@ -39,9 +37,9 @@ class Builder extends BasePostgresBuilder
     }
 
     #[Override]
-    public function getForeignKeys($tableName): array
+    public function getForeignKeys($table): array
     {
-        return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($tableName));
+        return $this->connection->selectFromWriteConnection($this->grammar->compileForeignKeysListing($table));
     }
 
     public function getViewDefinition($view): string
@@ -60,7 +58,7 @@ class Builder extends BasePostgresBuilder
      * @return Blueprint|\Illuminate\Database\Schema\Blueprint
      */
     #[Override]
-    protected function createBlueprint($table, ?Closure $callback = null)
+    protected function createBlueprint($table, ?Closure $callback = null): \Illuminate\Database\Schema\Blueprint|Blueprint
     {
         return new Blueprint($table, $callback);
     }

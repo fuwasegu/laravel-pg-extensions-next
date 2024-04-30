@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Fuwasegu\Postgres\Schema;
 
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\PostgreSQLSchemaManager;
 use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
 use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
 use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
@@ -102,6 +104,9 @@ class Blueprint extends BaseBlueprint
         return $this->dropIndexCommand('dropUnique', 'chk', $index);
     }
 
+    /**
+     * @throws Exception
+     */
     public function hasIndex($index, bool $unique = false): bool
     {
         if (\is_array($index)) {
@@ -144,7 +149,7 @@ class Blueprint extends BaseBlueprint
         return $this->addColumn(DateRangeType::TYPE_NAME, $column);
     }
 
-    protected function getSchemaManager()
+    protected function getSchemaManager(): PostgreSQLSchemaManager
     {
         return Schema::getConnection()->getDoctrineSchemaManager();
     }
