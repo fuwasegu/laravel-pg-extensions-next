@@ -1,7 +1,8 @@
 /vendor
 /.idea
-.ecs_cache
 phpunit.xml
 .phpunit.result.cache
 /build
 composer.lock
+/.cache
+/.phpunit.cache

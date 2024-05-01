@@ -2,41 +2,35 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Unit\Helpers;
+namespace Fuwasegu\Postgres\Tests\Unit\Helpers;
 
+use Fuwasegu\Postgres\PostgresConnection;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use Mockery;
 use PHPUnit\Framework\TestCase;
-use Umbrellio\Postgres\PostgresConnection;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
 
 /**
  * @mixin TestCase
- *
- * @property Blueprint $blueprint
- * @property PostgresConnection $postgresConnection
- * @property PostgresGrammar $postgresGrammar
  */
 trait BlueprintAssertions
 {
-    protected $blueprint;
+    protected Blueprint $blueprint;
 
-    protected $postgresConnection;
+    protected PostgresConnection $postgresConnection;
 
-    protected $postgresGrammar;
+    protected PostgresGrammar $postgresGrammar;
 
-    public function initializeMock(string $table)
+    public function initializeMock(string $table): void
     {
         $this->blueprint = new Blueprint($table);
-        $this->postgresConnection = $this->createMock(PostgresConnection::class);
+        $this->postgresConnection = Mockery::mock(PostgresConnection::class);
         $this->postgresGrammar = new PostgresGrammar();
     }
 
-    /**
-     * @param string|array $sql
-     */
-    protected function assertSameSql($sql): void
+    protected function assertSameSql(array|string $sql): void
     {
-        $this->assertSame((array) $sql, $this->runToSql());
+        $this->assertSame((array)$sql, $this->runToSql());
     }
 
     protected function assertRegExpSql(string $regexpExpected): void

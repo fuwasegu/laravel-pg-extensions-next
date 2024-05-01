@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\_data;
+namespace Fuwasegu\Postgres\Tests\_data;
 
 use Illuminate\Database\SQLiteConnection;
 

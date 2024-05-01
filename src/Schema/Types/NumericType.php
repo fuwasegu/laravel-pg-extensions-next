@@ -2,20 +2,23 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Types;
+namespace Fuwasegu\Postgres\Schema\Types;
 
 use Doctrine\DBAL\Platforms\AbstractPlatform;
 use Doctrine\DBAL\Types\Type;
+use Override;
 
 class NumericType extends Type
 {
-    public const TYPE_NAME = 'numeric';
+    public const string TYPE_NAME = 'numeric';
 
-    public function getSQLDeclaration(array $fieldDeclaration, AbstractPlatform $platform)
+    #[Override]
+    public function getSQLDeclaration(array $column, AbstractPlatform $platform): string
     {
         return static::TYPE_NAME;
     }
 
+    #[Override]
     public function getName(): string
     {
         return self::TYPE_NAME;

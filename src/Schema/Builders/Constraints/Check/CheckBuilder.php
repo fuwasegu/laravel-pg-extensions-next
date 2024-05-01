@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Builders\Constraints\Check;
+namespace Fuwasegu\Postgres\Schema\Builders\Constraints\Check;
 
+use Fuwasegu\Postgres\Schema\Builders\WhereBuilderTrait;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Builders\WhereBuilderTrait;
 
 class CheckBuilder extends Fluent
 {

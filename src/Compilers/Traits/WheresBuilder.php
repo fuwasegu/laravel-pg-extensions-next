@@ -2,19 +2,19 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Compilers\Traits;
+namespace Fuwasegu\Postgres\Compilers\Traits;
 
+use Fuwasegu\Postgres\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\Grammar;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Blueprint;
 
 trait WheresBuilder
 {
     protected static function whereRaw(Grammar $grammar, Blueprint $blueprint, array $where = []): string
     {
-        return call_user_func_array('sprintf', array_merge(
+        return sprintf(...array_merge(
             [str_replace('?', '%s', $where['sql'])],
-            static::wrapValues($where['bindings'])
+            static::wrapValues($where['bindings']),
         ));
     }
 
@@ -45,6 +45,7 @@ trait WheresBuilder
                 '(' . implode(',', static::wrapValues($where['values'])) . ')',
             ]);
         }
+
         return '0 = 1';
     }
 
@@ -57,6 +58,7 @@ trait WheresBuilder
                 '(' . implode(',', static::wrapValues($where['values'])) . ')',
             ]);
         }
+
         return '1 = 1';
     }
 
@@ -83,17 +85,16 @@ trait WheresBuilder
 
     protected static function wrapValues(array $values = []): array
     {
-        return collect($values)->map(function ($value) {
-            return static::wrapValue($value);
-        })->toArray();
+        return collect($values)->map(static fn($value) => static::wrapValue($value))->toArray();
     }
 
     protected static function wrapValue($value)
     {
-        if (is_string($value)) {
+        if (\is_string($value)) {
             return "'{$value}'";
         }
-        return (int) $value;
+
+        return (int)$value;
     }
 
     protected static function removeLeadingBoolean(string $value): string
@@ -104,7 +105,7 @@ trait WheresBuilder
     private static function build(Grammar $grammar, Blueprint $blueprint, Fluent $command): array
     {
         return collect($command->get('wheres'))
-            ->map(function ($where) use ($grammar, $blueprint) {
+            ->map(static function ($where) use ($grammar, $blueprint) {
                 return implode(' ', [
                     $where['boolean'],
                     '(' . static::{"where{$where['type']}"}($grammar, $blueprint, $where) . ')',

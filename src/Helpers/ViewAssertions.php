@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Helpers;
+namespace Fuwasegu\Postgres\Helpers;
 
 use Illuminate\Support\Facades\Schema;
 
@@ -34,9 +34,9 @@ trait ViewAssertions
     private function getViewDefinition(string $view): string
     {
         return preg_replace(
-            "#\s+#",
+            '#\\s+#',
             ' ',
-            strtolower(trim(str_replace("\n", ' ', Schema::getViewDefinition($view))))
+            strtolower(trim(str_replace("\n", ' ', Schema::getViewDefinition($view)))),
         );
     }
 }

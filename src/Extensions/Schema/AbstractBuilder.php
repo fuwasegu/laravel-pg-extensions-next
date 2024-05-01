@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Extensions\Schema;
+namespace Fuwasegu\Postgres\Extensions\Schema;
 
-use Umbrellio\Postgres\Extensions\AbstractComponent;
-use Umbrellio\Postgres\Schema\Builder;
+use Fuwasegu\Postgres\Extensions\AbstractComponent;
+use Fuwasegu\Postgres\Schema\Builder;
 
 /**
  * @mixin Builder

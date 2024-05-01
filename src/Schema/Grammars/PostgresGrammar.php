@@ -2,27 +2,29 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Grammars;
+namespace Fuwasegu\Postgres\Schema\Grammars;
 
+use Fuwasegu\Postgres\Compilers\AttachPartitionCompiler;
+use Fuwasegu\Postgres\Compilers\CheckCompiler;
+use Fuwasegu\Postgres\Compilers\CreateCompiler;
+use Fuwasegu\Postgres\Compilers\ExcludeCompiler;
+use Fuwasegu\Postgres\Compilers\UniqueCompiler;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
+use Fuwasegu\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
+use Fuwasegu\Postgres\Schema\Types\DateRangeType;
+use Fuwasegu\Postgres\Schema\Types\NumericType;
+use Fuwasegu\Postgres\Schema\Types\TsRangeType;
+use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Schema\Grammars\PostgresGrammar as BasePostgresGrammar;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Compilers\AttachPartitionCompiler;
-use Umbrellio\Postgres\Compilers\CheckCompiler;
-use Umbrellio\Postgres\Compilers\CreateCompiler;
-use Umbrellio\Postgres\Compilers\ExcludeCompiler;
-use Umbrellio\Postgres\Compilers\UniqueCompiler;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Check\CheckBuilder;
-use Umbrellio\Postgres\Schema\Builders\Constraints\Exclude\ExcludeBuilder;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniqueBuilder;
-use Umbrellio\Postgres\Schema\Builders\Indexes\Unique\UniquePartialBuilder;
-use Umbrellio\Postgres\Schema\Types\DateRangeType;
-use Umbrellio\Postgres\Schema\Types\NumericType;
-use Umbrellio\Postgres\Schema\Types\TsRangeType;
-use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
+use Override;
 
 class PostgresGrammar extends BasePostgresGrammar
 {
+    #[Override]
     public function compileCreate(Blueprint $blueprint, Fluent $command): string
     {
         $like = $this->getCommandByName($blueprint, 'like');
@@ -32,7 +34,7 @@ class PostgresGrammar extends BasePostgresGrammar
             $this,
             $blueprint,
             $this->getColumns($blueprint),
-            compact('like', 'ifNotExists')
+            ['like' => $like, 'ifNotExists' => $ifNotExists],
         );
     }
 
@@ -46,13 +48,14 @@ class PostgresGrammar extends BasePostgresGrammar
         return sprintf(
             'alter table %s detach partition %s',
             $this->wrapTable($blueprint),
-            $command->get('partition')
+            $command->get('partition'),
         );
     }
 
-    public function compileCreateView(/** @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
+    public function compileCreateView(/* @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
     {
         $materialize = $command->get('materialize') ? 'materialized' : '';
+
         return implode(' ', array_filter([
             'create',
             $materialize,
@@ -63,7 +66,7 @@ class PostgresGrammar extends BasePostgresGrammar
         ]));
     }
 
-    public function compileDropView(/** @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
+    public function compileDropView(/* @scrutinizer ignore-unused */ Blueprint $blueprint, Fluent $command): string
     {
         return 'drop view ' . $this->wrapTable($command->get('view'));
     }
@@ -103,6 +106,7 @@ class PostgresGrammar extends BasePostgresGrammar
         if ($constraints instanceof UniquePartialBuilder) {
             return UniqueCompiler::compile($this, $blueprint, $command, $constraints);
         }
+
         return $this->compileUnique($blueprint, $command);
     }
 
@@ -133,17 +137,17 @@ class PostgresGrammar extends BasePostgresGrammar
         return $type;
     }
 
-    protected function typeTsrange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    protected function typeTsrange(/* @scrutinizer ignore-unused */ Fluent $column): string
     {
         return TsRangeType::TYPE_NAME;
     }
 
-    protected function typeTstzrange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    protected function typeTstzrange(/* @scrutinizer ignore-unused */ Fluent $column): string
     {
         return TsTzRangeType::TYPE_NAME;
     }
 
-    protected function typeDaterange(/** @scrutinizer ignore-unused */ Fluent $column): string
+    protected function typeDaterange(/* @scrutinizer ignore-unused */ Fluent $column): string
     {
         return DateRangeType::TYPE_NAME;
     }

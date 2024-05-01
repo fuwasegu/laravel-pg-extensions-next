@@ -2,29 +2,28 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Functional\Schema;
+namespace Fuwasegu\Postgres\Tests\Functional\Schema;
 
+use Fuwasegu\Postgres\Helpers\ColumnAssertions;
+use Fuwasegu\Postgres\Helpers\TableAssertions;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
-use Umbrellio\Postgres\Helpers\ColumnAssertions;
-use Umbrellio\Postgres\Helpers\TableAssertions;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\FunctionalTestCase;
+use PHPUnit\Framework\Attributes\Test;
 
-class CreateTableTest extends FunctionalTestCase
+final class CreateTableTest extends FunctionalTestCase
 {
+    use ColumnAssertions;
+
     use DatabaseTransactions;
 
     use TableAssertions;
 
-    use ColumnAssertions;
-
-    /**
-     * @test
-     */
+    #[Test]
     public function createSimple(): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
+        Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
             $table->string('name');
             $table->string('field_comment')
@@ -36,12 +35,10 @@ class CreateTableTest extends FunctionalTestCase
         $this->seeTable('test_table');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function columnAssertions(): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
+        Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
             $table->string('name');
             $table->string('field_comment')
@@ -63,17 +60,15 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertCommentOnColumn('test_table', 'name');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createViaLike(): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
+        Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
             $table->string('name');
         });
 
-        Schema::create('test_table2', function (Blueprint $table) {
+        Schema::create('test_table2', static function (Blueprint $table): void {
             $table->like('test_table');
         });
 
@@ -82,18 +77,16 @@ class CreateTableTest extends FunctionalTestCase
         $this->assertCompareTables('test_table', 'test_table2');
     }
 
-    /**
-     * @test
-     */
+    #[Test]
     public function createViaLikeIncludingAll(): void
     {
-        Schema::create('test_table', function (Blueprint $table) {
+        Schema::create('test_table', static function (Blueprint $table): void {
             $table->increments('id');
             $table->string('name')
                 ->unique();
         });
 
-        Schema::create('test_table2', function (Blueprint $table) {
+        Schema::create('test_table2', static function (Blueprint $table): void {
             $table->like('test_table')
                 ->includingAll();
             $table->ifNotExists();

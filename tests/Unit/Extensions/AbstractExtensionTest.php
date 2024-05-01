@@ -2,53 +2,59 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests\Unit\Extensions;
+namespace Fuwasegu\Postgres\Tests\Unit\Extensions;
 
+use Fuwasegu\Postgres\Extensions\AbstractComponent;
+use Fuwasegu\Postgres\Extensions\AbstractExtension;
+use Fuwasegu\Postgres\Extensions\Exceptions\MacroableMissedException;
+use Fuwasegu\Postgres\Extensions\Exceptions\MixinInvalidException;
+use Fuwasegu\Postgres\Schema\Blueprint;
+use Fuwasegu\Postgres\Tests\TestCase;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
-use Umbrellio\Postgres\Extensions\AbstractComponent;
-use Umbrellio\Postgres\Extensions\AbstractExtension;
-use Umbrellio\Postgres\Extensions\Exceptions\MacroableMissedException;
-use Umbrellio\Postgres\Extensions\Exceptions\MixinInvalidException;
-use Umbrellio\Postgres\Schema\Blueprint;
-use Umbrellio\Postgres\Tests\TestCase;
+use Override;
+use PHPUnit\Framework\Attributes\Test;
 
-class AbstractExtensionTest extends TestCase
+final class AbstractExtensionTest extends TestCase
 {
     /**
-     * @test
+     * @throws MacroableMissedException
      */
+    #[Test]
     public function registerInvalidExtension(): void
     {
         $abstractExtension = new ExtensionStub();
 
         $this->expectException(MixinInvalidException::class);
 
-        /** @var AbstractExtension $abstractExtension */
+        // @var AbstractExtension $abstractExtension
         $abstractExtension::register();
     }
 
     /**
-     * @test
+     * @throws MixinInvalidException
      */
+    #[Test]
     public function registerWithInvalidMixin(): void
     {
         $abstractExtension = new InvalidExtensionStub();
 
         $this->expectException(MacroableMissedException::class);
 
-        /** @var AbstractExtension $abstractExtension */
+        // @var AbstractExtension $abstractExtension
         $abstractExtension::register();
     }
 }
 
 class InvalidExtensionStub extends AbstractExtension
 {
+    #[Override]
     public static function getName(): string
     {
         return 'extension';
     }
 
+    #[Override]
     public static function getMixins(): array
     {
         return [
@@ -63,11 +69,13 @@ class ComponentStub extends AbstractComponent
 
 class ExtensionStub extends AbstractExtension
 {
+    #[Override]
     public static function getName(): string
     {
         return 'extension';
     }
 
+    #[Override]
     public static function getMixins(): array
     {
         return [

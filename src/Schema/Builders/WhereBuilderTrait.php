@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Builders;
+namespace Fuwasegu\Postgres\Schema\Builders;
 
 use Illuminate\Support\Fluent;
 
@@ -15,22 +15,22 @@ trait WhereBuilderTrait
 
     public function whereRaw(string $sql, array $bindings = [], string $boolean = 'and'): self
     {
-        return $this->compileWhere('Raw', $boolean, compact('sql', 'bindings'));
+        return $this->compileWhere('Raw', $boolean, ['sql' => $sql, 'bindings' => $bindings]);
     }
 
-    public function where(string $column, string $operator, string $value, string $boolean = 'and'): self
+    public function where(string $column, string $operator, mixed $value, string $boolean = 'and'): self
     {
-        return $this->compileWhere('Basic', $boolean, compact('column', 'operator', 'value'));
+        return $this->compileWhere('Basic', $boolean, ['column' => $column, 'operator' => $operator, 'value' => $value]);
     }
 
     public function whereColumn(string $first, string $operator, string $second, string $boolean = 'and'): self
     {
-        return $this->compileWhere('Column', $boolean, compact('first', 'operator', 'second'));
+        return $this->compileWhere('Column', $boolean, ['first' => $first, 'operator' => $operator, 'second' => $second]);
     }
 
     public function whereIn(string $column, array $values, string $boolean = 'and', bool $not = false): self
     {
-        return $this->compileWhere($not ? 'NotIn' : 'In', $boolean, compact('column', 'values'));
+        return $this->compileWhere($not ? 'NotIn' : 'In', $boolean, ['column' => $column, 'values' => $values]);
     }
 
     public function whereNotIn(string $column, array $values = [], string $boolean = 'and'): self
@@ -40,12 +40,12 @@ trait WhereBuilderTrait
 
     public function whereNull(string $column, string $boolean = 'and', bool $not = false): self
     {
-        return $this->compileWhere($not ? 'NotNull' : 'Null', $boolean, compact('column'));
+        return $this->compileWhere($not ? 'NotNull' : 'Null', $boolean, ['column' => $column]);
     }
 
     public function whereBetween(string $column, array $values = [], string $boolean = 'and', bool $not = false): self
     {
-        return $this->compileWhere('Between', $boolean, compact('column', 'values', 'not'));
+        return $this->compileWhere('Between', $boolean, ['column' => $column, 'values' => $values, 'not' => $not]);
     }
 
     public function whereNotBetween(string $column, array $values = [], string $boolean = 'and'): self
@@ -60,7 +60,8 @@ trait WhereBuilderTrait
 
     protected function compileWhere(string $type, string $boolean, array $parameters = []): self
     {
-        $this->attributes['wheres'][] = array_merge(compact('type', 'boolean'), $parameters);
+        $this->attributes['wheres'][] = array_merge(['type' => $type, 'boolean' => $boolean], $parameters);
+
         return $this;
     }
 }

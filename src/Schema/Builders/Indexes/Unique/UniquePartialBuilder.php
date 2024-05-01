@@ -2,10 +2,10 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Schema\Builders\Indexes\Unique;
+namespace Fuwasegu\Postgres\Schema\Builders\Indexes\Unique;
 
+use Fuwasegu\Postgres\Schema\Builders\WhereBuilderTrait;
 use Illuminate\Support\Fluent;
-use Umbrellio\Postgres\Schema\Builders\WhereBuilderTrait;
 
 class UniquePartialBuilder extends Fluent
 {

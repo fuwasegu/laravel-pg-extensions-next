@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Extensions;
+namespace Fuwasegu\Postgres\Extensions;
 
 abstract class AbstractComponent
 {

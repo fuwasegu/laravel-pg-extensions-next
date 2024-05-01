@@ -2,15 +2,17 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Tests;
+namespace Fuwasegu\Postgres\Tests;
 
 use Illuminate\Support\Facades\Facade;
+use Override;
 use PDO;
 
 abstract class FunctionalTestCase extends TestCase
 {
-    protected $emulatePrepares = false;
+    protected bool $emulatePrepares = false;
 
+    #[Override]
     protected function setUp(): void
     {
         parent::setUp();
@@ -18,6 +20,7 @@ abstract class FunctionalTestCase extends TestCase
         Facade::clearResolvedInstances();
     }
 
+    #[Override]
     protected function getEnvironmentSetUp($app): void
     {
         parent::getEnvironmentSetUp($app);
@@ -28,7 +31,7 @@ abstract class FunctionalTestCase extends TestCase
         $app['config']->set('database.connections.main', [
             'driver' => 'pgsql',
             'host' => $params['host'],
-            'port' => (int) $params['port'],
+            'port' => (int)$params['port'],
             'database' => $params['database'],
             'username' => $params['user'],
             'password' => $params['password'],
@@ -54,12 +57,12 @@ abstract class FunctionalTestCase extends TestCase
     private function getConnectionParams(): array
     {
         return [
-            'driver' => $GLOBALS['db_type'] ?? 'pdo_pgsql',
-            'user' => $GLOBALS['db_username'],
-            'password' => $GLOBALS['db_password'],
-            'host' => $GLOBALS['db_host'],
-            'database' => $GLOBALS['db_database'],
-            'port' => $GLOBALS['db_port'],
+            'driver' => $_ENV['DB_TYPE'] ?? 'pdo_pgsql',
+            'user' => $_ENV['DB_USERNAME'] ?? 'postgres',
+            'password' => $_ENV['DB_PASSWORD'] ?? 'postgres',
+            'host' => $_ENV['DB_HOST'] ?? '127.0.0.1',
+            'database' => $_ENV['DB_DATABASE'] ?? 'testing',
+            'port' => $_ENV['DB_PORT'] ?? '1515',
         ];
     }
 }

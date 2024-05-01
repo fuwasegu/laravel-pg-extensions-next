@@ -2,62 +2,73 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres;
+namespace Fuwasegu\Postgres;
 
 use DateTimeInterface;
 use Doctrine\DBAL\Connection;
-use Doctrine\DBAL\Events;
+use Doctrine\DBAL\Exception;
+use Doctrine\DBAL\Schema\AbstractSchemaManager;
+use Doctrine\DBAL\Schema\Column;
+use Doctrine\DBAL\Schema\SchemaException;
+use Doctrine\DBAL\Types\Type;
+use Fuwasegu\Postgres\Extensions\AbstractExtension;
+use Fuwasegu\Postgres\Extensions\Exceptions\ExtensionInvalidException;
+use Fuwasegu\Postgres\Schema\Builder;
+use Fuwasegu\Postgres\Schema\Grammars\PostgresGrammar;
+use Fuwasegu\Postgres\Schema\Types\NumericType;
+use Fuwasegu\Postgres\Schema\Types\TsRangeType;
+use Fuwasegu\Postgres\Schema\Types\TsTzRangeType;
+use Illuminate\Database\Grammar;
 use Illuminate\Database\PostgresConnection as BasePostgresConnection;
-use Illuminate\Support\Facades\DB;
+use Illuminate\Database\Schema\Grammars\PostgresGrammar as IlluminatePostgresGrammar;
 use Illuminate\Support\Traits\Macroable;
+use Override;
 use PDO;
-use Umbrellio\Postgres\Extensions\AbstractExtension;
-use Umbrellio\Postgres\Extensions\Exceptions\ExtensionInvalidException;
-use Umbrellio\Postgres\Schema\Builder;
-use Umbrellio\Postgres\Schema\Grammars\PostgresGrammar;
-use Umbrellio\Postgres\Schema\Subscribers\SchemaAlterTableChangeColumnSubscriber;
-use Umbrellio\Postgres\Schema\Types\NumericType;
-use Umbrellio\Postgres\Schema\Types\TsRangeType;
-use Umbrellio\Postgres\Schema\Types\TsTzRangeType;
 
 class PostgresConnection extends BasePostgresConnection
 {
     use Macroable;
 
-    public $name;
+    private static array $extensions = [];
 
-    private static $extensions = [];
+    public array $doctrineTypes = [];
 
-    private $initialTypes = [
+    public ?Connection $doctrineConnection = null;
+
+    public array $doctrineTypeMappings = [];
+
+    private array $initialTypes = [
         TsRangeType::TYPE_NAME => TsRangeType::class,
         TsTzRangeType::TYPE_NAME => TsTzRangeType::class,
         NumericType::TYPE_NAME => NumericType::class,
     ];
 
     /**
-     * @param AbstractExtension|string $extension
-     * @codeCoverageIgnore
+     * @throws ExtensionInvalidException
      */
-    final public static function registerExtension(string $extension): void
+    final public static function registerExtension(AbstractExtension|string $extension): void
     {
         if (! is_subclass_of($extension, AbstractExtension::class)) {
             throw new ExtensionInvalidException(sprintf(
                 'Class %s must be implemented from %s',
                 $extension,
-                AbstractExtension::class
+                AbstractExtension::class,
             ));
         }
         self::$extensions[$extension::getName()] = $extension;
     }
 
-    public function getSchemaBuilder()
+    #[Override]
+    public function getSchemaBuilder(): Builder
     {
         if ($this->schemaGrammar === null) {
             $this->useDefaultSchemaGrammar();
         }
+
         return new Builder($this);
     }
 
+    #[Override]
     public function useDefaultPostProcessor(): void
     {
         parent::useDefaultPostProcessor();
@@ -66,31 +77,18 @@ class PostgresConnection extends BasePostgresConnection
         $this->registerInitialTypes();
     }
 
-    public function getDoctrineConnection(): Connection
-    {
-        $doctrineConnection = parent::getDoctrineConnection();
-        $this->overrideDoctrineBehavior($doctrineConnection);
-        return $doctrineConnection;
-    }
-
-    public function bindValues($statement, $bindings)
+    #[Override]
+    public function bindValues($statement, $bindings): void
     {
         if ($this->getPdo()->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
             foreach ($bindings as $key => $value) {
-                $parameter = is_string($key) ? $key : $key + 1;
+                $parameter = \is_string($key) ? $key : $key + 1;
 
-                switch (true) {
-                    case is_bool($value):
-                        $dataType = PDO::PARAM_BOOL;
-                        break;
-
-                    case $value === null:
-                        $dataType = PDO::PARAM_NULL;
-                        break;
-
-                    default:
-                        $dataType = PDO::PARAM_STR;
-                }
+                $dataType = match (true) {
+                    \is_bool($value) => PDO::PARAM_BOOL,
+                    $value === null => PDO::PARAM_NULL,
+                    default => PDO::PARAM_STR,
+                };
 
                 $statement->bindValue($parameter, $value, $dataType);
             }
@@ -99,7 +97,8 @@ class PostgresConnection extends BasePostgresConnection
         }
     }
 
-    public function prepareBindings(array $bindings)
+    #[Override]
+    public function prepareBindings(array $bindings): array
     {
         if ($this->getPdo()->getAttribute(PDO::ATTR_EMULATE_PREPARES)) {
             $grammar = $this->getQueryGrammar();
@@ -116,7 +115,8 @@ class PostgresConnection extends BasePostgresConnection
         return parent::prepareBindings($bindings);
     }
 
-    protected function getDefaultSchemaGrammar()
+    #[Override]
+    protected function getDefaultSchemaGrammar(): Grammar|IlluminatePostgresGrammar
     {
         return $this->withTablePrefix(new PostgresGrammar());
     }
@@ -124,33 +124,80 @@ class PostgresConnection extends BasePostgresConnection
     private function registerInitialTypes(): void
     {
         foreach ($this->initialTypes as $type => $typeClass) {
-            DB::registerDoctrineType($typeClass, $type, $type);
+            $this->registerDoctrineType($typeClass, $type, $type);
         }
     }
 
-    /**
-     * @codeCoverageIgnore
-     */
+    public function registerDoctrineType(string $class, string $name, string $type): void
+    {
+        if (! Type::hasType($name)) {
+            try {
+                Type::addType($name, $class);
+            } catch (Exception) {
+            }
+        }
+
+        $this->doctrineTypes[$name] = [$type, $class];
+    }
+
     private function registerExtensions(): void
     {
-        collect(self::$extensions)->each(function ($extension) {
-            /** @var AbstractExtension $extension */
+        collect(self::$extensions)->each(function ($extension): void {
+            // @var AbstractExtension $extension
             $extension::register();
             foreach ($extension::getTypes() as $type => $typeClass) {
-                DB::registerDoctrineType($typeClass, $type, $type);
+                $this->registerDoctrineType($typeClass, $type, $type);
             }
         });
     }
 
-    private function overrideDoctrineBehavior(Connection $connection): Connection
+    /**
+     * @throws Exception
+     */
+    public function getDoctrineConnection(): Connection
     {
-        $eventManager = $connection->getEventManager();
-        if (! $eventManager->hasListeners(Events::onSchemaAlterTableChangeColumn)) {
-            $eventManager->addEventSubscriber(new SchemaAlterTableChangeColumnSubscriber());
+        if (!$this->doctrineConnection instanceof Connection) {
+            $driver = $this->getDoctrineDriver();
+
+            $this->doctrineConnection = new Connection(array_filter([
+                'pdo' => $this->getPdo(),
+                'dbname' => $this->getDatabaseName(),
+                'driver' => $driver->getName(),
+                'serverVersion' => $this->getConfig('server_version'),
+            ]), $driver);
+
+            foreach ($this->doctrineTypeMappings as $name => $type) {
+                $this->doctrineConnection
+                    ->getDatabasePlatform()
+                    ->registerDoctrineTypeMapping($type, $name);
+            }
         }
-        $connection
-            ->getDatabasePlatform()
-            ->setEventManager($eventManager);
-        return $connection;
+        assert($this->doctrineConnection instanceof Connection);
+
+        return $this->doctrineConnection;
+    }
+
+    public function getDoctrineDriver(): PostgresDriver
+    {
+        return new PostgresDriver();
+    }
+
+    /**
+     * @throws Exception
+     */
+    public function getDoctrineSchemaManager(): AbstractSchemaManager
+    {
+        return $this->getDoctrineConnection()->createSchemaManager();
+    }
+
+    /**
+     * @throws Exception
+     * @throws SchemaException
+     */
+    public function getDoctrineColumn(string $table, string $column): Column
+    {
+        return $this->getDoctrineSchemaManager()
+            ->introspectTable($table)
+            ->getColumn($column);
     }
 }

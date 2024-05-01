@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Umbrellio\Postgres\Helpers;
+namespace Fuwasegu\Postgres\Helpers;
 
 use Illuminate\Support\Facades\DB;
 
@@ -17,7 +17,7 @@ trait IndexAssertions
     abstract public static function assertMatchesRegularExpression(
         string $pattern,
         string $string,
-        string $message = ''
+        string $message = '',
     ): void;
 
     abstract public static function assertTrue($condition, string $message = ''): void;
@@ -77,6 +77,7 @@ trait IndexAssertions
             WHERE t.relname = ? AND c.conname = ?;
         ';
         $definition = DB::selectOne($expression, [$table, $index]);
-        return $definition ? true : false;
+
+        return (bool)$definition;
     }
 }
