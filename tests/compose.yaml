@@ -1,8 +1,24 @@
 services:
-  db:
+  db-14:
+    image: postgres:14
+    ports:
+      - 1414:5432
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'testing'
+  db-15:
     image: postgres:15
     ports:
-      - 5432:5432
+      - 1515:5432
+    environment:
+      POSTGRES_USER: 'postgres'
+      POSTGRES_PASSWORD: 'postgres'
+      POSTGRES_DB: 'testing'
+  db-16:
+    image: postgres:16
+    ports:
+      - 1616:5432
     environment:
       POSTGRES_USER: 'postgres'
       POSTGRES_PASSWORD: 'postgres'
