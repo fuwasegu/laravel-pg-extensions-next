@@ -5,17 +5,14 @@ declare(strict_types=1);
 namespace Fuwasegu\Postgres;
 
 use Fuwasegu\Postgres\Connectors\ConnectionFactory;
-use Illuminate\Database\DatabaseServiceProvider;
 use Illuminate\Database\DatabaseTransactionsManager;
+use Illuminate\Support\ServiceProvider;
 use Override;
 
-class PostgresExtensionsServiceProvider extends DatabaseServiceProvider
+class PostgresExtensionsServiceProvider extends ServiceProvider
 {
-    /**
-     * @codeCoverageIgnore
-     */
     #[Override]
-    protected function registerConnectionServices(): void
+    public function register(): void
     {
         $this->app->singleton('db.factory', static fn($app) => new ConnectionFactory($app));
 
