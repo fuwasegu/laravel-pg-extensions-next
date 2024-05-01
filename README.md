@@ -8,7 +8,7 @@ This project extends Laravel's database layer to allow use specific Postgres fea
 
 - PHP^8.3
 - Laravel^11.0
-- PostgreSQL^14|^15
+- PostgreSQL^14|^15|^16
 
 ## Installation
 
