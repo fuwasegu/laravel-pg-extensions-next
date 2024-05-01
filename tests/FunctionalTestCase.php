@@ -62,7 +62,7 @@ abstract class FunctionalTestCase extends TestCase
             'password' => $_ENV['DB_PASSWORD'] ?? 'postgres',
             'host' => $_ENV['DB_HOST'] ?? '127.0.0.1',
             'database' => $_ENV['DB_DATABASE'] ?? 'testing',
-            'port' => $_ENV['DB_PORT'] ?? '5432',
+            'port' => $_ENV['DB_PORT'] ?? '1515',
         ];
     }
 }

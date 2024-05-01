@@ -10,6 +10,7 @@ use Fuwasegu\Postgres\Tests\FunctionalTestCase;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Schema;
 use Override;
+use PHPUnit\Framework\Attributes\Group;
 use PHPUnit\Framework\Attributes\Test;
 
 final class CreateViewTest extends FunctionalTestCase
@@ -38,11 +39,13 @@ final class CreateViewTest extends FunctionalTestCase
     }
 
     #[Test]
+    #[Group('withSchema')]
     public function createFacadeView(): void
     {
         Schema::createView('test_view', 'select * from test_table where name is not null');
 
         $this->seeView('test_view');
+
         $this->assertSameView(
             'select test_table.id, test_table.name from test_table where (test_table.name is not null);',
             'test_view',
@@ -53,6 +56,24 @@ final class CreateViewTest extends FunctionalTestCase
     }
 
     #[Test]
+    #[Group('withoutSchema')]
+    public function _createFacadeView(): void
+    {
+        Schema::createView('test_view', 'select * from test_table where name is not null');
+
+        $this->seeView('test_view');
+
+        $this->assertSameView(
+            'select id, name from test_table where (name is not null);',
+            'test_view',
+        );
+
+        Schema::dropView('test_view');
+        $this->notSeeView('test_view');
+    }
+
+    #[Test]
+    #[Group('withSchema')]
     public function createBlueprintView(): void
     {
         Schema::table('test_table', static function (Blueprint $table): void {
@@ -62,6 +83,27 @@ final class CreateViewTest extends FunctionalTestCase
         $this->seeView('test_view');
         $this->assertSameView(
             'select test_table.id, test_table.name from test_table where (test_table.name is not null);',
+            'test_view',
+        );
+
+        Schema::table('users', static function (Blueprint $table): void {
+            $table->dropView('test_view');
+        });
+
+        $this->notSeeView('test_view');
+    }
+
+    #[Test]
+    #[Group('withoutSchema')]
+    public function _createBlueprintView(): void
+    {
+        Schema::table('test_table', static function (Blueprint $table): void {
+            $table->createView('test_view', 'select * from test_table where name is not null');
+        });
+
+        $this->seeView('test_view');
+        $this->assertSameView(
+            'select id, name from test_table where (name is not null);',
             'test_view',
         );
 

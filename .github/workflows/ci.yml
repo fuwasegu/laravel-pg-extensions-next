@@ -55,4 +55,9 @@ jobs:
         run: composer rector
 
       - name: Test
-        run: composer test
+        if: ${{ contains(fromJSON('[14, 15]'), matrix.php) }}
+        run: composer test -- --exclude-group withoutSchema
+
+      - name: Test
+        if: ${{ contains(fromJSON('[16]'), matrix.php) }}
+        run: composer test -- --exclude-group withSchema
